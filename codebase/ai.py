@@ -17,7 +17,10 @@ Chế độ giả (mặc định khi .env chưa có MODEL_PROVIDER, hoặc MODEL
 Nối model thật: điền .env (chép từ .env.example), rồi viết nhánh gọi API ở dưới theo docs/connect-model.md
 (có ví dụ OpenAI, Claude, model chạy trên máy, và cách nối nhà cung cấp khác). Không dán API key vào file này.
 """
+import json
 import os
+import urllib.error
+import urllib.request
 
 from tracing import model_call
 
@@ -40,7 +43,62 @@ def load_env(path=os.path.join(ROOT, ".env")):
 load_env()
 MODEL_PROVIDER = (os.environ.get("MODEL_PROVIDER") or "fake").strip().lower()
 MODEL_NAME = (os.environ.get("MODEL_NAME") or "").strip()
+if MODEL_PROVIDER == "openai" and not MODEL_NAME:
+    MODEL_NAME = "gpt-4o-mini"
 API_KEY = (os.environ.get("API_KEY") or "").strip()
+OPENAI_CHAT_COMPLETIONS_URL = "https://api.openai.com/v1/chat/completions"
+
+
+def _call_openai(system: str, user: str) -> dict:
+    if not API_KEY:
+        raise RuntimeError("Thiếu API_KEY trong .env; không gửi khóa vào chat hoặc commit file .env.")
+
+    messages = []
+    if system:
+        messages.append({"role": "system", "content": system})
+    messages.append({"role": "user", "content": user})
+    body = json.dumps(
+        {"model": MODEL_NAME, "messages": messages},
+        ensure_ascii=False,
+    ).encode("utf-8")
+    request = urllib.request.Request(
+        OPENAI_CHAT_COMPLETIONS_URL,
+        data=body,
+        headers={
+            "Authorization": "Bearer " + API_KEY,
+            "Content-Type": "application/json",
+        },
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=60) as response:
+            data = json.loads(response.read().decode("utf-8"))
+    except urllib.error.HTTPError as error:
+        detail = error.read().decode("utf-8", "replace")[:300]
+        raise RuntimeError("OpenAI API trả HTTP %d: %s" % (error.code, detail)) from error
+    except urllib.error.URLError as error:
+        raise RuntimeError("Không kết nối được OpenAI API: %s" % error.reason) from error
+    except json.JSONDecodeError as error:
+        raise RuntimeError("OpenAI API không trả về JSON hợp lệ.") from error
+
+    try:
+        text = data["choices"][0]["message"]["content"]
+        usage = data["usage"]
+        tokens_in = usage["prompt_tokens"]
+        tokens_out = usage["completion_tokens"]
+    except (KeyError, IndexError, TypeError) as error:
+        raise RuntimeError("Phản hồi OpenAI thiếu nội dung hoặc usage token cần thiết.") from error
+
+    if not isinstance(text, str):
+        raise RuntimeError("OpenAI API không trả nội dung văn bản.")
+    if (
+        not isinstance(tokens_in, int)
+        or isinstance(tokens_in, bool)
+        or not isinstance(tokens_out, int)
+        or isinstance(tokens_out, bool)
+    ):
+        raise RuntimeError("OpenAI API trả usage token không hợp lệ.")
+    return {"text": text, "tokens_in": tokens_in, "tokens_out": tokens_out}
 
 
 @model_call
@@ -49,8 +107,15 @@ def call_model(system: str, user: str) -> dict:
         last = (user.strip().splitlines() or [""])[-1]
         return {"text": "[câu trả lời giả — chưa nối model] " + last[:60], "model": "fake", "tokens_in": 0, "tokens_out": 0}
 
-    # NHÓM VIẾT: gọi model thật ở đây (theo MODEL_PROVIDER, MODEL_NAME, API_KEY) rồi trả đúng 4 khoá.
-    # Ví dụ chép được cho từng nhà cung cấp: docs/connect-model.md mục 2.
-    raise NotImplementedError(
-        "chưa viết phần gọi model thật cho MODEL_PROVIDER=%s trong codebase/ai.py — xem docs/connect-model.md"
-        % MODEL_PROVIDER)
+    if MODEL_PROVIDER != "openai":
+        raise NotImplementedError(
+            "MODEL_PROVIDER=%s chưa được nối; hiện hỗ trợ fake và openai." % MODEL_PROVIDER
+        )
+
+    result = _call_openai(system, user)
+    return {
+        "text": result["text"],
+        "model": MODEL_NAME,
+        "tokens_in": result["tokens_in"],
+        "tokens_out": result["tokens_out"],
+    }
