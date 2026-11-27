@@ -55,9 +55,9 @@ Data BTC cấp đã dùng (nếu có — không commit nguyên file): không dù
 ## §4. Thiết kế *(guide 2.2, 3.2)*
 - **Lát cắt MỘT CÂU** (1 người dùng · 1 việc · 1 quyết định AI · 1 kết quả): Một gia đình (2 người lớn, 1 bé 5 tuổi) nhập ngân sách, sở thích và khung giờ cho một ngày ở một khu vui chơi; AI chọn và sắp xếp hoạt động, code kiểm các ràng buộc cứng, và gia đình nhận lịch trình từng giờ kèm tổng tiền, lý do và nguồn, hoặc lý do không xếp được cùng gợi ý nới ràng buộc.
 - Không làm: đặt vé hoặc thanh toán · lập lịch nhiều ngày · theo dõi thời tiết/sự kiện theo thời gian thực hoặc tự đổi lịch sau khi đã xuất · cam kết đây là phương án tối ưu tuyệt đối.
-- **Dữ liệu bắt buộc:** khu vui chơi, ngày đi, ngân sách, khung giờ, nhóm đi (tuổi và chiều cao từng người). Thiếu một mục thì hỏi lại, không đoán.
+- **Dữ liệu bắt buộc:** ngày đi, ngân sách, khung giờ, nhóm đi (tuổi và chiều cao từng trẻ em). Thiếu một mục thì hỏi lại, không đoán. Hai giá trị mặc định có công bố (đổi sau lượt 1, luôn in ra trong output để người dùng sửa): (1) không nêu khu → **Khu vui chơi Mẫu**, vì bản demo chỉ có dữ liệu khu này; khu khác thì từ chối; (2) người lớn không nêu tuổi/chiều cao → tính là người lớn 18–59 tuổi, cao đủ giới hạn các trò (`DEFAULT_ADULT` trong `agent.py`), nhắc người dùng báo nếu có người ≥60 tuổi để tính vé ưu đãi.
 - **Kiểm tra tuổi/chiều cao:** tuổi 0–100 và chiều cao 50–220 cm; ngoài khoảng này thì yêu cầu nhập lại, không lập lịch.
-- **Tách ý từ câu chữ tự do — một quyết định AI phụ, có code kiểm sau** (`agent.py` `_extract_request` → `_request_errors`): người dùng gõ câu thường ("bé cao 1m1, đi 9h–17h, 4 triệu"), AI chỉ đổi câu đó thành JSON yêu cầu; trường không có trong câu để `null`, không đoán. Code kiểm từng trường trước khi tra hay xếp: đủ 5 mục bắt buộc · ngày `YYYY-MM-DD` · ngân sách là số nguyên > 0 · khung giờ `HH:MM` và giờ về sau giờ đi · tuổi, chiều cao là số nguyên *(đã có trong code)* · **chiều cao trong khoảng 50–220 cm, tuổi 0–100** *(chưa có — Trường thêm trước CP3, để bắt lỗi đọc "1m1" thành 11 cm hoặc 1 cm)*. Sai hoặc thiếu trường nào thì hỏi lại đúng 1 lượt, kèm giá trị AI đã hiểu để người dùng sửa (vd "mình hiểu bé cao 11 cm — đúng không?"). Câu thử: `K17`. Rủi ro của bước này: tách sai một con số thì mọi ràng buộc sau đều kiểm trên dữ liệu sai, dù code kiểm đúng.
+- **Tách ý từ câu chữ tự do — một quyết định AI phụ, có code kiểm sau** (`agent.py` `_extract_request` → `_request_errors`): người dùng gõ câu thường ("bé cao 1m1, đi 9h–17h, 4 triệu"), AI chỉ đổi câu đó thành JSON yêu cầu; trường không có trong câu để `null`, không đoán. Code kiểm từng trường trước khi tra hay xếp: đủ 5 mục bắt buộc · ngày `YYYY-MM-DD` · ngân sách là số nguyên > 0 · khung giờ `HH:MM` và giờ về sau giờ đi · tuổi, chiều cao là số nguyên · **chiều cao trong khoảng 50–220 cm, tuổi 0–100** (để bắt lỗi đọc "1m1" thành 11 cm hoặc 1 cm). Sai hoặc thiếu trường nào thì hỏi lại đúng 1 lượt, kèm giá trị AI đã hiểu để người dùng sửa (vd "mình hiểu bé cao 11 cm — đúng không?"). Câu thử: `K17`. Rủi ro của bước này: tách sai một con số thì mọi ràng buộc sau đều kiểm trên dữ liệu sai, dù code kiểm đúng.
 - **Ràng buộc:** *cứng* (vi phạm thì không xuất lịch): giờ mở/giờ show, thời gian di chuyển (+ đệm), tuổi/chiều cao/yêu cầu đi cùng người lớn, ngân sách, khung giờ, nguồn điểm/show cập nhật trong 30 ngày. *Mềm* (chỉ ảnh hưởng độ phù hợp): sở thích, giờ ăn/nghỉ cho bé. Dự báo thời tiết chỉ được dùng khi có dữ liệu cho ngày đã chọn.
 - **Sơ đồ** (workflow CP2; catalog hiện dùng cho chạy thử phải được đánh dấu synthetic):
 
@@ -67,11 +67,12 @@ Data BTC cấp đã dùng (nếu có — không commit nguyên file): không dù
       V -->|Chưa đủ| Q["Hỏi lại dữ liệu thiếu; không đoán"]
       Q --> U
       V -->|Đủ| T["Tra điểm chơi, show, thời tiết theo ngày và thời gian di chuyển"]
-      T --> A["AI chọn hoạt động và thứ tự; chỉ dùng ID có trong dữ liệu"]
-      A --> C["Code kiểm: ID, giờ mở/show, di chuyển + đệm, tuổi/chiều cao, mưa, ngân sách, độ mới nguồn"]
+      T --> A["AI chọn hoạt động và thứ tự từ danh sách code đã lọc; không điền giờ"]
+      A --> X["Code xếp giờ: show đúng giờ diễn, điểm chơi trong giờ mở, đi lại + 5 phút đệm, tránh mưa; bỏ điểm không xếp được kèm lý do; bỏ điểm có phụ phí khi vượt ngân sách; chèn điểm hợp sở thích / chỗ ăn nghỉ cho bé nếu còn chỗ"]
+      X --> C["Code kiểm: ID, giờ mở/show, di chuyển + đệm, tuổi/chiều cao, mưa, ngân sách, độ mới nguồn"]
       C -->|Hợp lệ| O["Trả lịch theo giờ, tổng tiền từ code, lý do và nguồn"]
-      C -->|Có lỗi, lần đầu| R["AI sửa theo danh sách vi phạm do code trả"]
-      R --> C
+      C -->|Có lỗi hoặc lịch rỗng, lần đầu| R["AI chọn lại theo danh sách điểm bị loại + lý do do code trả"]
+      R --> X
       C -->|Vẫn lỗi hoặc thiếu căn cứ| N["Không đưa lịch; code nêu ràng buộc chưa đạt và mức cần nới"]
       O --> E["Người dùng xem, đổi ngân sách/khung giờ/hoạt động hoặc áp dụng"]
       N --> E
@@ -90,10 +91,12 @@ Data BTC cấp đã dùng (nếu có — không commit nguyên file): không dù
   | `tinh_tong_tien(lich, nhom_di, khung_gio=None)` | Lịch có ID, nhóm đi, khung giờ tùy chọn | So sánh vé lẻ/combo, vé sau 16:00, phụ phí và `tong_cong_vnd` từ `data/tickets.json`; được validator gọi nội bộ | Không |
   | `kiem_lich_trinh(lich, nhom_di, khung_gio, ngan_sach, ngay=None, today=None, so_thich=None)` | Điểm có `id/start/end`, nhóm tuổi/chiều cao, khung giờ, ngân sách; ngày, ngày tham chiếu và sở thích tùy chọn | `hop_le`, vi phạm cứng/mềm, chi tiết tổng tiền, gợi ý nới; kiểm nguồn điểm/show ≤30 ngày, giờ, show, phù hợp nhóm, mưa (nếu có dữ liệu), di chuyển + đệm, ngân sách, nghỉ và sở thích | Không |
 
-  `search_example(query)` hiện vẫn có trong `tools.py` để tương thích với agent mẫu; đây không phải công cụ của workflow C1 và cần được thay bằng các công cụ trên khi nối agent. Hiện `agent.py` vẫn chỉ gọi công cụ mẫu này.
+  `search_example(query)` còn trong `tools.py` từ khung mẫu, workflow C1 không gọi. `agent.py` gọi `tra_diem_choi`, `tra_lich_show`, `tra_thoi_tiet`, `uoc_thoi_gian_di`, `kiem_lich_trinh` (gọi `tinh_tong_tien` bên trong).
+
+- **Vì sao code xếp giờ, không để AI điền giờ** (đổi sau lượt 1, `eval/run-1.csv`): ở lượt 1 model tự điền giờ và lệch vài phút ở mọi chỗ (xếp show S01 lúc 11:00 thay vì 10:30, chừa 2 phút cho chặng cần 12 phút), sửa 1 lần vẫn sai → `thuong` 0/8. Giờ mở, giờ show và thời gian đi đều là số cố định trong dữ liệu, nên tính bằng code là đúng chỗ; AI giữ phần cần phán đoán: chọn điểm nào, đi theo thứ tự nào, vì sao hợp gia đình này.
 
 - **Mức tự động:** [x] AI gợi ý, người quyết · [ ] AI tự làm khi chắc, chuyển người khi không · [ ] AI tự làm — AI tạo bản nháp, code kiểm; gia đình quyết định có đi theo lịch hay không. Không có hành động đặt chỗ hay thanh toán.
-- **Chỗ chặn rủi ro**: model không tự tính giá hoặc tự xác nhận giờ; `kiem_lich_trinh` kiểm ID, giờ, ngày diễn show, điều kiện nhóm, mưa khi có dữ liệu, di chuyển + đệm và ngân sách; tổng tiền do `tinh_tong_tien` tính. Nguồn điểm/show cũ hơn 30 ngày bị đánh dấu vi phạm cứng (không tự lọc khỏi danh sách); tuổi dữ liệu của vé, thời tiết và ma trận di chuyển hiện chưa được validator kiểm tra. Nếu thiếu dự báo, validator hiện bỏ qua kiểm tra mưa, nên workflow phải nói rõ chưa xác minh thời tiết. Có vi phạm sau tối đa một lần sửa thì không xuất lịch như phương án hợp lệ; nêu lỗi và gợi ý nới do code trả. Mọi dữ liệu hiện có đều `synthetic`, không phải căn cứ cho khu vui chơi thật.
+- **Chỗ chặn rủi ro**: model không tự tính giá hoặc tự xác nhận giờ; `kiem_lich_trinh` kiểm ID, giờ, ngày diễn show, điều kiện nhóm, mưa khi có dữ liệu, di chuyển + đệm và ngân sách; tổng tiền do `tinh_tong_tien` tính. Nguồn điểm/show cũ hơn 30 ngày bị code loại trước khi đưa cho AI chọn (và vẫn là vi phạm cứng trong `kiem_lich_trinh`), output nói rõ vì sao không xếp; tuổi dữ liệu của vé, thời tiết và ma trận di chuyển hiện chưa được validator kiểm tra. Nếu thiếu dự báo, validator hiện bỏ qua kiểm tra mưa, nên workflow phải nói rõ chưa xác minh thời tiết. Có vi phạm sau tối đa một lần sửa thì không xuất lịch như phương án hợp lệ; nêu lỗi và gợi ý nới do code trả. Mọi dữ liệu hiện có đều `synthetic`, không phải căn cứ cho khu vui chơi thật.
 - **Chỗ người duyệt** (việc AI không được tự làm): Người dùng tự quyết có áp dụng lịch; AI không đặt vé, trả tiền, hoặc khẳng định thông tin synthetic là thông tin thật.
 - **Nguyên tắc thiết kế** (≥3, bắt buộc G10):
 

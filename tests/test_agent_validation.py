@@ -94,7 +94,9 @@ class TestAgentSafety(unittest.TestCase):
                 "Ngày 29/11, 9h-17h, ngân sách 3 triệu."
             )["output"]
 
-        self.assertIn("Không thể đưa lịch này như một phương án hợp lệ.", result)
+        self.assertIn("Không thể đưa ra lịch hợp lệ", result)
+        self.assertIn("Không xếp P17", result)
+        self.assertIn("140 cm", result)
         self.assertNotIn("Lịch trình gợi ý", result)
 
     def test_total_is_calculated_by_tools_not_model_output(self):
@@ -120,14 +122,16 @@ class TestAgentSafety(unittest.TestCase):
 
         self.assertIn("Tổng tiền do code tính: 1,850,000 VNĐ", result)
         self.assertNotIn("1,000,000đ", result)
-        expected_schedule = [
-            {"id": item["id"], "start": item["start"], "end": item["end"]}
-            for item in schedule["lich"]
-        ]
-        self.assertEqual(response["lich"], expected_schedule)
+        # Giờ do code xếp (không lấy giờ model gửi); lịch code xếp phải qua kiem_lich_trinh.
+        self.assertEqual([i["id"] for i in response["lich"]], ["P09", "P26", "P13", "S05"])
+        s05 = next(i for i in response["lich"] if i["id"] == "S05")
+        self.assertEqual((s05["start"], s05["end"]), ("15:30", "15:55"))
+        check = agent.kiem_lich_trinh(response["lich"], request["nhom_di"], request["khung_gio"],
+                                      request["ngan_sach"], ngay=request["ngay"])
+        self.assertTrue(check["hop_le"], check["vi_pham_cung"])
         self.assertEqual(
             json.loads(result.rsplit("JSON lịch: ", 1)[1]),
-            {"lich": expected_schedule},
+            {"lich": response["lich"]},
         )
 
     def test_unfeasible_schedule_uses_validator_relaxation_suggestions(self):
@@ -153,13 +157,13 @@ class TestAgentSafety(unittest.TestCase):
         self.assertIn("Cần nới ngân sách thêm ít nhất", response["output"])
         self.assertEqual(response["lich"], [])
 
-    def test_missing_park_is_requested_without_defaulting(self):
+    def test_missing_park_defaults_to_demo_park_and_asks_for_the_rest(self):
         with patch("agent.call_model") as model:
             response = agent.answer(json.dumps({"ngay": None}))
 
         model.assert_not_called()
         result = response["output"]
-        self.assertIn("Vui lòng cung cấp khu vui chơi.", result)
+        self.assertIn("chỉ xếp lịch trong Khu vui chơi Mẫu", result)
         self.assertIn("Vui lòng cung cấp ngày đi.", result)
         self.assertNotIn("Lịch trình gợi ý", result)
         self.assertEqual(response["lich"], [])
