@@ -1,0 +1,47 @@
+{
+  "park": "Khu vui chơi Mẫu",
+  "currency": "VND",
+  "afternoon_cutoff": "16:00",
+  "single_tickets": {
+    "free_under_cm": 100,
+    "child_or_senior": {
+      "height_min_cm": 100,
+      "height_max_exclusive_cm": 140,
+      "senior_min_age": 60,
+      "full_day_vnd": 800000,
+      "after_16h_vnd": 550000
+    },
+    "adult": {
+      "height_min_cm": 140,
+      "full_day_vnd": 1050000,
+      "after_16h_vnd": 700000
+    }
+  },
+  "combos": [
+    {
+      "id": "C_FAMILY_2A1C",
+      "name": "Combo Gia Đình (2 Người lớn + 1 Trẻ em, cả ngày)",
+      "requires": {
+        "adult": 2,
+        "child_or_senior": 1
+      },
+      "full_day_only": true,
+      "price_vnd": 2650000,
+      "note": "Rẻ hơn mua lẻ 250.000đ (2x1.050.000 + 800.000 = 2.900.000đ)"
+    },
+    {
+      "id": "C_GROUP_4A",
+      "name": "Combo Nhóm Bạn (4 Người lớn, cả ngày)",
+      "requires": {
+        "adult": 4,
+        "child_or_senior": 0
+      },
+      "full_day_only": true,
+      "price_vnd": 3900000,
+      "note": "Rẻ hơn mua lẻ 300.000đ (4x1.050.000 = 4.200.000đ)"
+    }
+  ],
+  "source": "synthetic (tham chiếu khung giờ/giá VinWonders Nha Trang, xem 2026-11-27)",
+  "updated_at": "2026-11-27",
+  "synthetic": true
+}
