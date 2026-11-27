@@ -3,6 +3,7 @@ import datetime
 import itertools
 import json
 import re
+from typing import Optional
 
 from ai import call_model
 from tools import (
@@ -219,24 +220,38 @@ def _format_result(schedule: list, validation: dict, by_id: dict, request: dict,
     return "\n".join(lines)
 
 
+def _answer_result(output: str, schedule: Optional[list] = None) -> dict:
+    machine_schedule = [
+        {"id": item["id"], "start": item["start"], "end": item["end"]}
+        for item in (schedule or [])
+    ]
+    output += "\n\nJSON lịch: " + json.dumps(
+        {"lich": machine_schedule}, ensure_ascii=False, separators=(",", ":")
+    )
+    return {"output": output, "lich": machine_schedule}
+
+
 def answer(text: str) -> dict:
     if _PAYMENT_REQUEST.search(text):
-        return {
-            "output": "Mình không thể đặt vé hoặc thanh toán và không xử lý thông tin thẻ/OTP. Vui lòng không gửi dữ liệu thanh toán."
-        }
+        return _answer_result(
+            "Mình không thể đặt vé hoặc thanh toán và không xử lý thông tin thẻ/OTP. Vui lòng không gửi dữ liệu thanh toán."
+        )
     if _IMAGE_REQUEST.search(text):
-        return {
-            "output": "Bản demo chưa đọc được ảnh. Vui lòng nhập bằng chữ ngày đi, khung giờ, ngân sách và tuổi/chiều cao từng người."
-        }
+        return _answer_result(
+            "Bản demo chưa đọc được ảnh. Vui lòng nhập bằng chữ ngày đi, khung giờ, ngân sách và tuổi/chiều cao từng người."
+        )
 
     request = _extract_request(text)
     if request is None:
-        return {"output": "Chưa trích xuất được yêu cầu thành dữ liệu có cấu trúc. Vui lòng nhập JSON theo schema bắt buộc: %s" % _REQUEST_SCHEMA}
+        return _answer_result(
+            "Chưa trích xuất được yêu cầu thành dữ liệu có cấu trúc. Vui lòng nhập JSON theo schema bắt buộc: %s"
+            % _REQUEST_SCHEMA
+        )
 
     if request.get("intent") == "ngoai_pham_vi":
-        return {
-            "output": "Bản demo chỉ hỗ trợ lập lịch một ngày trong Khu vui chơi Mẫu; mình không thể hỗ trợ yêu cầu này."
-        }
+        return _answer_result(
+            "Bản demo chỉ hỗ trợ lập lịch một ngày trong Khu vui chơi Mẫu; mình không thể hỗ trợ yêu cầu này."
+        )
 
     park_name = request.get("khu")
     if (
@@ -244,17 +259,17 @@ def answer(text: str) -> dict:
         and park_name.strip()
         and park_name.strip().casefold() != SUPPORTED_PARK
     ):
-        return {
-            "output": "Bản demo hiện chỉ hỗ trợ Khu vui chơi Mẫu; không có dữ liệu xác minh cho khu bạn nêu."
-        }
+        return _answer_result(
+            "Bản demo hiện chỉ hỗ trợ Khu vui chơi Mẫu; không có dữ liệu xác minh cho khu bạn nêu."
+        )
 
     missing = _request_errors(request)
     if missing:
         note("dừng: thiếu hoặc sai dữ liệu bắt buộc")
-        return {
-            "output": " ".join(missing)
+        return _answer_result(
+            " ".join(missing)
             + " Chưa tra cứu hoặc lập lịch; vui lòng bổ sung rồi gửi lại."
-        }
+        )
 
     note("bắt đầu: tra catalog, show, thời tiết và thời gian di chuyển")
     park = tra_diem_choi(request["khu"], request["nhom_di"])
@@ -263,7 +278,9 @@ def answer(text: str) -> dict:
     items = park["items"] + shows["shows"]
     if not items:
         note("dừng: catalog không có hoạt động để lập lịch")
-        return {"output": "Không có điểm chơi hoặc show trong dữ liệu để lập lịch. Dữ liệu catalog hiện là synthetic."}
+        return _answer_result(
+            "Không có điểm chơi hoặc show trong dữ liệu để lập lịch. Dữ liệu catalog hiện là synthetic."
+        )
 
     zones = sorted({item["zone"] for item in items})
     travel = {}
@@ -299,10 +316,14 @@ def answer(text: str) -> dict:
     schedule, fake_model = _schedule_from_model(planner_prompt, demo_schedule)
     if schedule is None:
         note("dừng: model không trả lịch đúng cấu trúc")
-        return {"output": "Không thể lập lịch vì model không trả về danh sách hoạt động đúng cấu trúc; chưa có lịch nào được xác nhận."}
+        return _answer_result(
+            "Không thể lập lịch vì model không trả về danh sách hoạt động đúng cấu trúc; chưa có lịch nào được xác nhận."
+        )
     if not schedule:
         note("dừng: model không đề xuất hoạt động nào")
-        return {"output": "Chưa tìm được hoạt động để lập lịch với dữ liệu hiện có. Chưa có lịch nào được xác nhận; hãy kiểm tra dữ liệu hoặc nới ngân sách/khung giờ rồi thử lại."}
+        return _answer_result(
+            "Chưa tìm được hoạt động để lập lịch với dữ liệu hiện có. Chưa có lịch nào được xác nhận; hãy kiểm tra dữ liệu hoặc nới ngân sách/khung giờ rồi thử lại."
+        )
 
     validation = kiem_lich_trinh(
         schedule,
@@ -353,12 +374,11 @@ def answer(text: str) -> dict:
             lines.append("Gợi ý nới hoặc điều chỉnh: " + " ".join(suggestions))
         lines.append("Chưa xác minh thời tiết." if not weather.get("co_du_lieu") else
                      "Dữ liệu được dùng hiện là synthetic.")
-        return {"output": "\n".join(lines)}
+        return _answer_result("\n".join(lines))
 
     note("hoàn tất: code xác nhận các ràng buộc cứng")
     by_id = {item["id"]: item for item in items}
-    return {
-        "output": _format_result(
-            schedule, validation, by_id, request, weather, fake_model
-        )
-    }
+    return _answer_result(
+        _format_result(schedule, validation, by_id, request, weather, fake_model),
+        schedule,
+    )

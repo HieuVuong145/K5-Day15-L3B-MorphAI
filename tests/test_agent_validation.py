@@ -115,19 +115,55 @@ class TestAgentSafety(unittest.TestCase):
             "agent.call_model",
             return_value={"text": json.dumps(schedule), "model": "gpt-4o-mini"},
         ):
-            result = agent.answer(json.dumps(request))["output"]
+            response = agent.answer(json.dumps(request))
+        result = response["output"]
 
         self.assertIn("Tổng tiền do code tính: 1,850,000 VNĐ", result)
         self.assertNotIn("1,000,000đ", result)
+        expected_schedule = [
+            {"id": item["id"], "start": item["start"], "end": item["end"]}
+            for item in schedule["lich"]
+        ]
+        self.assertEqual(response["lich"], expected_schedule)
+        self.assertEqual(
+            json.loads(result.rsplit("JSON lịch: ", 1)[1]),
+            {"lich": expected_schedule},
+        )
+
+    def test_unfeasible_schedule_uses_validator_relaxation_suggestions(self):
+        request = dict(self.request, ngan_sach=1_000_000)
+        proposed = {
+            "lich": [
+                {"id": "P09", "start": "09:15", "end": "10:00"},
+                {"id": "P26", "start": "11:00", "end": "12:00"},
+                {"id": "P13", "start": "13:00", "end": "13:50"},
+                {"id": "S05", "start": "15:30", "end": "15:55"},
+            ]
+        }
+        with patch(
+            "agent.call_model",
+            side_effect=[
+                {"text": json.dumps(proposed), "model": "gpt-4o-mini"},
+                {"text": json.dumps({"lich": []}), "model": "gpt-4o-mini"},
+            ],
+        ):
+            response = agent.answer(json.dumps(request))
+
+        self.assertIn("Gợi ý nới hoặc điều chỉnh:", response["output"])
+        self.assertIn("Cần nới ngân sách thêm ít nhất", response["output"])
+        self.assertEqual(response["lich"], [])
 
     def test_missing_park_is_requested_without_defaulting(self):
         with patch("agent.call_model") as model:
-            result = agent.answer(json.dumps({"ngay": None}))["output"]
+            response = agent.answer(json.dumps({"ngay": None}))
 
         model.assert_not_called()
+        result = response["output"]
         self.assertIn("Vui lòng cung cấp khu vui chơi.", result)
         self.assertIn("Vui lòng cung cấp ngày đi.", result)
         self.assertNotIn("Lịch trình gợi ý", result)
+        self.assertEqual(response["lich"], [])
+        self.assertEqual(json.loads(result.rsplit("JSON lịch: ", 1)[1]), {"lich": []})
 
     def test_unsupported_park_is_refused_before_planning(self):
         request = {"khu": "Hà Nội"}
@@ -141,15 +177,17 @@ class TestAgentSafety(unittest.TestCase):
     def test_payment_and_card_requests_are_blocked_without_echoing_details(self):
         card_number = "4111 1111 1111 1111"
         with patch("agent.call_model") as model:
-            result = agent.answer(
+            response = agent.answer(
                 "Đặt vé luôn giúp mình, số thẻ %s, hạn 12/28" % card_number
-            )["output"]
+            )
 
         model.assert_not_called()
+        result = response["output"]
         self.assertIn("không thể đặt vé hoặc thanh toán", result)
         self.assertIn("không xử lý thông tin thẻ/OTP", result)
         self.assertNotIn(card_number, result)
         self.assertNotIn("vui lòng gửi otp", result.casefold())
+        self.assertEqual(response["lich"], [])
 
     def test_image_requests_explain_text_only_input_without_calling_model(self):
         with patch("agent.call_model") as model:
