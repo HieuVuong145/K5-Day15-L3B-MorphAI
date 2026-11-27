@@ -7,14 +7,18 @@ Track: [ ] A · [ ] B · [ ] C · [ ] D · [ ] E — bài toán: [đề gợi ý
 Data BTC cấp đã dùng (nếu có — không commit nguyên file): __
 
 ## §0. Hiện tại việc này diễn ra thế nào *(guide 1.1)*
-- Luồng hiện tại của việc này, trong khoá hoặc trên app thật (3–5 bước; ảnh chụp từ tài khoản của mình, đã che thông tin):
-- Công cụ / AI đang được dùng cho việc này (nếu có) + nguồn. Không kiểm được thì ghi "chưa kiểm":
+- Luồng hiện tại của việc này, trong khoá hoặc trên app thật (3–5 bước; ảnh chụp từ tài khoản của mình, đã che thông tin): 
+  - Người lập kế hoạch tìm danh sách các hoạt động vui chơi, trò chơi kèm theo bản đồ và giá vé cho mỗi hoạt động ở trên website hoặc app của khu vui chơi.
+  - Người lập kế hoạch chưa biết nhiều thông tin nên tìm thêm các bài review/lịch trình mẫu trên các nền tảng mạng xã hội để xem thứ tự trải nghiệm các hoạt động hợp lý theo tuần tự.
+  - Người lập kế hoạch tự kiểm tra hoạt động vui chơi nào trẻ con chơi được (xét theo tuổi và chiều cao,...), các show biểu diễn lúc mấy giờ.
+  - Người lập kế hoạch sau đó tự lập một lịch trình dự kiến; Nếu gặp điều kiện thời thiết xấu hoặc đi muộn giờ thì tự thích nghi.
+- Công cụ / AI đang được dùng cho việc này (nếu có) + nguồn. Không kiểm được thì ghi "chưa kiểm": Một số người hỏi Chatbot AI chung chung như "lên lịch đi VinWonders 1 ngày", nhưng Chatbot thường bịa giờ show/giá vé hoặc không kiểm được trùng giờ — chưa kiểm chứng tỉ lệ dùng thực tế (sẽ hỏi trong khảo sát/phỏng vấn ở bước 1.2).
 
 ## §1. Người dùng & bằng chứng *(guide 1.1, 1.2)*
-- Người dùng chính (một vai cụ thể):
-- Việc họ cố làm xong (`động từ + đối tượng + bối cảnh`, không có chữ AI):
-- Hôm nay họ giải bằng gì, hỏng ở đâu, vì sao chưa bỏ:
-- Pain (KHÔNG chữ AI): ai — đang làm gì — vướng đâu — hậu quả gì:
+- Người dùng chính (một vai cụ thể): Người lập kế hoạch cho lịch trình hoạt động vui chơi
+- Việc họ cố làm xong (`động từ + đối tượng + bối cảnh`, không có chữ AI): Lập kế hoạch các hoạt động tại khu vui chơi cho gia đình có trẻ nhỏ sao cho khớp giờ mở cửa, giờ show, phù hợp lứa tuổi và nằm trong ngân sách.
+- Hôm nay họ giải bằng gì, hỏng ở đâu, vì sao chưa bỏ: Đọc bản đồ khu vui chơi kèm các review rồi họ tự note lại. Kế hoạch thường không như dự kiến khi show đổi theo ngày, thiếu thông tin giới hạn chiều cao/tuổi của bé, hoặc cộng nhầm tiền vé/thời gian di chuyển. Chưa bỏ được vì lịch trình gợi ý không cá nhân hoá theo khung giờ và ngân sách của từng nhà.
+- Pain (KHÔNG chữ AI): Người lập kế hoạch lịch trình ở khu vui chơi cho gia đình có con nhỏ — đang tự ghép lịch đi khu vui chơi từ nhiều nguồn rời rạc — vướng ở chỗ thông tin giờ mở, giờ show, quy định lứa tuổi và giá vé không đồng nhất — hậu quả là mất nhiều thời gian chuẩn bị nhưng đến nơi vẫn bị lỡ show, đi lòng vòng làm trẻ mệt hoặc vượt ngân sách.
 - Bằng chứng — số chính + kết luận (chi tiết: `evidence/summary.md`): __
 
 ## §2. Impact & quyết định chọn *(guide 1.3)*
