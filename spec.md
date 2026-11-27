@@ -23,15 +23,24 @@ Data BTC cấp đã dùng (nếu có — không commit nguyên file): không dù
 
 ## §2. Impact & quyết định chọn *(guide 1.3)*
 
-| Hướng | Bao nhiêu người gặp | Bao nhiêu lần / tháng | Mỗi lần tốn gì | Impact / tháng | Làm kịp không | Chọn? |
-|---|---|---|---|---|---|---|
-|  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |
+> Bản 27/11 16:40 — mới có 4 phỏng vấn (n nhỏ, ghi x/n, không ghi %). Ô *(chờ số)* điền khi có đếm review (`evidence/data-mining.md`) và khảo sát (`evidence/survey/`). Cập nhật đến CP3.
 
-- **Impact / tháng** của hướng chọn = __ người × __ lần × __ phút = __ — nguồn từng thừa số: __ (không có nguồn thì ghi rõ *(tự ước tính)*)
+| Hướng (không có chữ AI) | Bao nhiêu người gặp | Bao nhiêu lần / tháng | Mỗi lần tốn gì | Impact / tháng | Làm kịp không | Chọn? |
+|---|---|---|---|---|---|---|
+| ① Người lên lịch cho gia đình / nhóm bạn tự ghép giờ mở, giờ show, giá vé, giới hạn tuổi trước ngày đi khu vui chơi | 3/4 phỏng vấn kể mất thời gian chuẩn bị (P2, P3, P4) · review: *(chờ số)* | 1–3 lần (P2: 1, P3: 3, P4: 1) | 180 phút chuẩn bị (P2) · "1 buổi tối" (P4) · vẫn phải cắt bớt hoạt động vì thiếu ngân sách (P2) | *(chờ số: số nhóm khách/tháng × tỉ lệ gặp vấn đề × phút)* | Có | *(chốt 17:00)* |
+| ② Nhóm đang ở khu vui chơi gặp mưa, lạnh hoặc show bị huỷ, phải tự xoay phần còn lại của ngày | 2/4 phỏng vấn (P3, P4) · review nhãn `thoi_tiet`: *(chờ số)* | 1–3 lần (P3: 3, P4: 1) | Bỏ lỡ hoạt động đã định (P4: huỷ tắm) · chi thêm tiền ngoài dự kiến (P3: áo ấm, áo mưa, ô) | *(chờ số)* | Có (dùng chung data và bộ kiểm với ①) | *(chốt 17:00)* |
+| ③ Chọn hoạt động cho vừa ngân sách | 1/4 (P2) · review nhãn `chi_phi`: *(chờ số)* | 1 lần (P2) | Phải bỏ hoạt động, "tiếc vì không được trải nghiệm hết" (P2) | *(chờ số)* | Có | Gộp vào ① (ngân sách là một ràng buộc của lịch) |
+| ④ Xếp hàng chờ lâu ở trò đông | 0/4 phỏng vấn nhắc · review nhãn `xep_hang`: *(chờ số)* | — | Phút chờ | — | Không: không có data thời gian chờ thật | Loại |
+
+- **Impact / tháng** của hướng chọn = __ nhóm khách × __ lần × __ phút = __ — nguồn từng thừa số:
+  - Số nhóm khách / tháng: số lượt khách công bố công khai của một khu vui chơi *(chờ nguồn — phải mở trang)* ÷ số người mỗi nhóm (khảo sát câu 2)
+  - Tỉ lệ gặp vấn đề: x/N review (`evidence/data-mining.md`) + khảo sát câu 5 *(chờ số)*
+  - Phút mỗi lần: 180 phút (P2) — n = 1, thay bằng trung vị khảo sát câu 4 + 8 *(chờ số)*
 - Hướng ĐÃ LOẠI + vì sao (giữ lại, đừng xoá):
-- Số lần / tháng của từng kiểu người dùng (dùng cho persona ở §8):
+  - ④ Xếp hàng: không có data thời gian chờ thật, lát cắt không giải được.
+  - C3 (khách bị huỷ chuyến bay) và C2 (lễ tân đổi phòng): nhóm chọn C1; C2 khó gặp đủ lễ tân trong 2 ngày.
+  - Điều phỏng vấn cho thấy ngược giả thuyết: 0/4 người đi cùng trẻ nhỏ; P1 không đúng vai (concert, lịch BTC sắp sẵn — không có pain xếp lịch).
+- Số lần / tháng của từng kiểu người dùng (dùng cho persona ở §8): đi 1 lần / tháng (P2, P4) · đi 3 lần / tháng (P3) — *(tự ước tính từ n = 3, thay bằng khảo sát câu 1)*
 
 ## §3. Giải pháp tương tự *(guide 2.1)*
 - [sản phẩm / tính năng gần giống]: một điều đáng học · một điều đáng né · mình khác gì
