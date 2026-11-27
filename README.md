@@ -1,65 +1,106 @@
-> Đây là khung repo nộp bài. Điền mọi chỗ `____`, giữ nguyên tên các mục. **Mục 0 xoá đi sau khi tạo repo xong.**
-> Giờ, mốc, luật, rubric: xem `README.md`, `02-guide.md`, `03-rubric.md` trong repo đề (bộ đề BTC phát).
+# Mini Hackathon AI — AI20K khoá 5 · L3
 
-# [Tên nhóm] — [Tên lát cắt]
+> **[README]** → [01-challenge-brief](01-challenge-brief.md) → [tracks/](tracks/README.md) → [02-guide](02-guide.md) → [03-rubric](03-rubric.md)
 
-**Thành viên, lớp, track:** xem [TEAMS.md](TEAMS.md). **Điền TEAMS.md đúng format**: khi chấm và đánh giá, BTC quét file này để ghép điểm cho từng người.
+**Tìm một chỗ đau thật của người dùng, thiết kế một giải pháp AI cho nó, rồi chứng minh bằng số.**
 
-*Lát cắt = phần nhỏ nhất làm xong được trong hackathon: một người dùng · một việc · một quyết định AI · một kết quả.*
+> **Trang hackathon:** https://ai20k-hackathon.pages.dev — đăng ký nhóm, tìm đồng đội, nộp checkpoint, đồng hồ đếm giờ, side quest.
 
----
+Bài của nhóm phải cân bằng hai nửa: **tư duy sản phẩm** (đúng người dùng, đúng chỗ đau, đáng làm) và **giải pháp AI** (thiết kế công nghệ ra sao, AI dựa vào dữ liệu và công cụ nào, chạy thật được). Ba câu phải trả lời, mỗi câu bằng số:
 
-## 0. Tạo repo nhóm từ khung này *(guide bước 1.0 — xoá mục này khi xong)*
+1. **Pain & impact:** ai đang đau, đau thế nào, bao nhiêu người, mỗi tháng mất bao nhiêu?
+2. **Giải pháp AI:** AI quyết định gì, dựa trên dữ liệu và công cụ nào, chọn workflow hay agent và vì sao, chặn rủi ro ở đâu, người duyệt ở đâu? Bản chạy thử phải gọi AI thật.
+3. **Đánh giá & chi phí:** giải pháp đúng được bao nhiêu trên bộ câu thử? Dùng thật ở quy mô thật của sản phẩm thì tốn bao nhiêu mỗi tháng?
 
-**Hai luật:** repo **mới, công khai (Public)** · tên `K5-Day15-<lớp>-<tên nhóm>`, vd `K5-Day15-L3A-StudyPulse` (tên nhóm viết liền, không dấu). Chép **nội dung bên trong** `starter-repo/` — `README.md`, `run.py` phải nằm ngay ở trang đầu repo.
-
-**(a) Không cần terminal — làm trên web GitHub**
-1. **New repository** → tên theo mẫu → **Public** → không tick thêm gì → tạo.
-2. Trên máy mở thư mục `starter-repo/`, **bật hiện file ẩn** (Mac Finder: `Cmd + Shift + .` · Windows: View → Show → Hidden items) để thấy `.gitignore`, `.env.example`.
-3. Trên repo vừa tạo: **Add file → Upload files** → **kéo thả** tất cả file và thư mục bên trong `starter-repo/` → **Commit changes**. Kéo thả mới giữ được thư mục con; lỗi vì nhiều file quá thì tải từng thư mục.
-4. Kiểm: có `.gitignore` chưa (hay thiếu nhất). Thiếu thì **Add file → Create new file**, tên `.gitignore`, dán nội dung từ máy.
-5. Từ giờ sửa file ngay trên web (biểu tượng bút chì → Commit). Phần code vẫn cần **một** người chạy được trên máy: trước mỗi lượt chạy tải **Code → Download ZIP** về thư mục mới (mang `.env` sang), chạy xong chỉ upload file kết quả và file vừa sửa; trong lúc đang chạy không ai sửa `eval/benchmark.csv` trên web.
-
-**(b) Dùng git**
-```bash
-git clone https://github.com/<tai-khoan>/K5-Day15-L3A-TenNhom.git
-cd K5-Day15-L3A-TenNhom
-cp -R ../duong-dan-toi/starter-repo/. .      # Windows PowerShell: Copy-Item -Recurse -Force ..\duong-dan-toi\starter-repo\* .
-git status                                   # không được có .env, data-btc/
-git add -A && git commit -m "Khung repo từ starter-repo" && git push
-```
-
-**Xong khi:** mở link repo bằng **cửa sổ ẩn danh** thấy được file (link nộp CP1) · đã mời thành viên (Settings → Collaborators) · đã điền `TEAMS.md` và `python run.py check` không báo gì ở phần "Kiểm TEAMS.md".
+- Nhóm **3–5 người**, tự ghép, bầu một đội trưởng. Chưa có nhóm: mục **Đồng đội** trên trang hackathon.
+- Khoảng **10 giờ làm thật**: chiều tối Thứ Sáu 27/11 và sáng Thứ Bảy 28/11.
+- **6 track:** A EdTech (chính khoá AI20K) · B Y tế · C Du lịch · D Thương mại điện tử · E Tài chính · F Làn khác (lĩnh vực bất kỳ, có insight từ người dùng thật).
+- BTC **không cấp API key** cho mọi nhóm. Nhóm dùng gói miễn phí hoặc tài khoản của nhóm (một số credit API là quà của side quest trên trang hackathon).
+- Mọi kỹ thuật cần dùng, nhóm đã học trong 15 ngày giai đoạn 1. [02-guide.md](02-guide.md) chỉ rõ bước nào ôn lại ngày nào.
 
 ---
 
-## Nhóm làm gì, khung làm gì
+## Đọc theo thứ tự này
 
-| Nhóm quyết định và viết | Khung làm sẵn (không cần sửa) |
-|---|---|
-| Người dùng, pain, bằng chứng, impact (`evidence/`, `spec.md` §1–§2) | — |
-| Hình dạng giải pháp, công cụ, prompt, luồng (`spec.md` §4, `codebase/agent.py`, `tools.py`, `ai.py`) | Ghi mọi lần gọi model / công cụ vào trace, cộng token (`codebase/tracing.py`) |
-| Bộ câu thử, metric, chuẩn "đạt" (`eval/benchmark.csv`, `eval/metric_spec.yaml`, `spec.md` §7) | Kiểm đủ cột, đủ câu `kho` / `tu_choi`, đủ ≥1/3 câu từ người dùng / data thật (`run.py check`) |
-| Chấm cột `pass` theo metric spec | Chạy cả bộ một lệnh, có run ID, model, token từng câu (`run.py eval`) · tính % đạt (`run.py score`) |
-| Persona, số người dùng thật, giá model (`cost/personas.yaml`) | Sinh ~50 phiên, chạy thật qua bản chạy thử, tính chi phí / phiên, / task thành công, / tháng 3 kịch bản (`run.py simulate`) |
+| # | File | Đọc khi nào | Trong đó có gì |
+|---|---|---|---|
+| 1 | **README.md** *(file này)* | Đầu buổi Zoom | Tổng quan · checkpoint · chấm điểm · luật |
+| 2 | [01-challenge-brief.md](01-challenge-brief.md) | Lúc chọn track | Đề bài: bối cảnh, 6 track, 7 hạng mục bắt buộc, dữ liệu |
+| 3 | [tracks/](tracks/README.md): **file của track nhóm chọn** | Ngay sau file 2 | Bối cảnh · người dùng · định hướng ý tưởng · data · công cụ gợi ý |
+| 4 | [**02-guide.md**](02-guide.md) | **Mở suốt hai ngày** | Làm từng bước: câu hỏi phải trả lời → làm gì → ra file nào → nộp mốc nào |
+| 5 | [03-rubric.md](03-rubric.md) | Trước mỗi checkpoint | Chấm từng phần thế nào |
 
-*Ví dụ track A (ví dụ cỡ, không phải lời giải):* nhóm viết công cụ `search_lesson` tra bài pre-class đã đánh mã đoạn, luồng "tra đoạn → model trả lời kèm mã đoạn, không có thì nói không có", metric "mọi khẳng định có mã đoạn đúng", persona "ôn dồn trước kiểm tra". Khung chạy 25 câu thử ra `run-1.csv`, nhóm chấm `pass`, `score` in % đạt; `simulate` chạy 50 phiên ra chi phí / task thành công cho hai model.
+Đi kèm:
+- [starter-repo/](starter-repo/README.md): khung repo nộp bài. Có sẵn thư mục, file mẫu, và lệnh `run.py` chạy bộ câu thử và mô phỏng chi phí.
+- [data/](01-challenge-brief.md#data): dữ liệu BTC cấp cho track A (EdTech). Track B–F nhóm tự tìm data.
+- [further-reading/](further-reading/README.md): JTBD, phỏng vấn người dùng, HAX, PAIR, bảng giá model.
 
-## Chạy trong 3 phút
+---
 
-Bộ khung cần **Python 3.10 trở lên** (Python 3.9 có sẵn trên macOS vẫn chạy được, chỉ in một dòng nhắc). **Không cần `pip install`.**
+<a id="checkpoint"></a>
+## CHECKPOINT
 
-**Bước 1 — Mở cửa sổ lệnh ngay trong thư mục repo**
+**Mỗi checkpoint nộp trên [trang hackathon](https://ai20k-hackathon.pages.dev), thay cả nhóm.** Đội trưởng đăng ký nhóm một lần (tên nhóm + PIN + mã học viên đội trưởng); ai trong nhóm có PIN cũng nộp thay được. Trang ghi giờ nộp và commit của repo lúc nộp, agent tự kiểm đủ phần trong vài phút.
+- Đúng hạn và đủ phần → đủ điểm mốc. Muộn hoặc thiếu → 0 điểm mốc đó.
+- Vẫn nộp phần đã có và khai thật phần còn thiếu.
+- Tự soát trước khi nộp: bước guide ghi ở từng mốc.
 
-| Windows (PowerShell) | macOS |
-|---|---|
-| Mở thư mục repo bằng File Explorer → bấm vào thanh địa chỉ → gõ `powershell` → Enter | Mở **Terminal** (Cmd + Space, gõ "Terminal") → gõ `cd ` (có dấu cách) → kéo thả thư mục repo vào → Enter |
+### CP1 · 17:00 Thứ Sáu 27/11 · 3 điểm
 
-Gõ `dir` (Windows) hoặc `ls` (macOS / Linux): thấy `run.py` và `README.md` là đang đứng đúng chỗ.
+- `TEAMS.md` điền đủ thành viên + mã học viên, **đúng format** (đội trưởng ở dòng 1).
+- Track (A–F) + bài toán của nhóm trong 1–2 câu: ai, đang làm gì, vướng ở đâu. Không viết chữ AI. Track F kèm thẻ đề.
+- Lát cắt dự kiến (1 câu).
+- Canvas 7 dòng (`canvas.md`).
+- Link repo GitHub công khai, mở được bằng cửa sổ ẩn danh.
 
-**Bước 2 — Kiểm Python và chạy thử**
+Tự soát: [guide 1.4](02-guide.md#b1-4) · **Nộp CP1:** [trang hackathon → Nộp checkpoint](https://ai20k-hackathon.pages.dev/#submit)
 
-| Việc | Windows (PowerShell) | macOS / Linux |
+### CP2 · 19:30 Thứ Sáu 27/11 · 4 điểm
+
+- Canvas cập nhật + 1–3 dòng "đã đổi gì so với CP1".
+- Nguồn bằng chứng đang làm (đào data / phỏng vấn / khảo sát) và đã làm đến đâu.
+- Link `spec.md`, trong §4 có sơ đồ kiến trúc giải pháp.
+- Link `eval/benchmark.csv`, ≥10 câu thử. Đã có `eval/metric_spec.yaml` và `data/DATA_CARD.md` bản đầu.
+- **Chuẩn "đạt" bằng số**, chép từ `spec.md` §7. **Chốt tại mốc này, không sửa về sau.**
+- Bản chạy thử dạng khung: `python run.py` đi hết luồng với AI giả.
+
+Tự soát: [guide 2.5](02-guide.md#b2-5) · **Nộp CP2:** [trang hackathon → Nộp checkpoint](https://ai20k-hackathon.pages.dev/#submit)
+
+### CP3 · 10:00 Thứ Bảy 28/11 · 4 điểm
+
+- Bằng chứng pain đạt ngưỡng ở ≥1 nguồn + ≥5 trích dẫn / ví dụ nguyên văn. Link `evidence/summary.md`.
+- Bộ câu thử 20–30 câu: ≥5 câu `kho`, ≥2 câu `tu_choi`.
+- **Video 30 giây:** bản chạy thử gọi AI thật. YouTube để "Không công khai", hoặc Google Drive để "Bất kỳ ai có đường liên kết". Mở thử bằng cửa sổ ẩn danh.
+- Kết quả lượt 1 (x/N câu đạt) + run ID.
+- Link `spec.md` đã có §0–§7.
+- Phần chưa xong, nếu có.
+
+Tự soát: [guide 3.4](02-guide.md#b3-4) · **Nộp CP3:** [trang hackathon → Nộp checkpoint](https://ai20k-hackathon.pages.dev/#submit)
+
+### CP4 · 14:30 Thứ Bảy 28/11 · 4 điểm
+
+- Phòng demo + link repo.
+- Tích 7 hạng mục bắt buộc đã có ([01-challenge-brief](01-challenge-brief.md#7-hang-muc)).
+- Kết quả lượt 1 → lượt 2 (ví dụ 14/24 → 18/24).
+- Chi phí / task thành công ở kịch bản cơ sở, kèm tên model.
+- Slide, định dạng nào cũng được (PDF, PPTX, HTML, Keynote…): file trong repo **hoặc** link slide nộp ở form CP4 (Drive, Canva, Google Slides…, ai có link cũng xem được) · link video demo dự phòng.
+- Phần chưa xong, nếu có.
+
+Tự soát: [guide 4.4](02-guide.md#b4-4) · **Nộp CP4:** [trang hackathon → Nộp checkpoint](https://ai20k-hackathon.pages.dev/#submit)
+
+### Hạn chót · 23:59 Thứ Bảy 28/11 · không nộp form
+
+Khoá repo bản cuối:
+- Sửa theo góp ý ở buổi demo, mọi thay đổi sau 14:30 ghi vào `spec.md` §10.
+- Mỗi người 1 file `reflection/`.
+
+Hướng dẫn: [guide 5.3](02-guide.md#b5-3).
+
+---
+
+## Lịch hai ngày
+
+| Khi nào | Ở đâu | Việc |
 |---|---|---|
 | Kiểm Python | `python --version` (không được thì `py --version`) | `python3 --version` |
 | Chạy bản chạy thử (chế độ giả, chưa gọi model) | `python run.py` | `python3 run.py` |
