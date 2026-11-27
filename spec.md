@@ -128,7 +128,7 @@ Data BTC cấp đã dùng (nếu có — không commit nguyên file): không dù
 - **Trường hợp đặc thù lĩnh vực (lớp 4):** Trời mưa (`K05`, `K10`) → loại điểm/show ngoài trời trong khung mưa và báo rõ; ngân sách/giờ không khả thi (`K06`, `K09`) → không trả lịch, nêu gợi ý nới từ `goi_y_noi`; ép bỏ qua chiều cao trẻ (`K13`) → chặn cứng theo `kiem_lich_trinh`.
 
 ## §7. Đánh giá & chuẩn "đạt" *(guide 2.4, 4.1)*
-- Data card: `data/DATA_CARD.md` · bộ câu thử: `eval/benchmark.csv` — 17 câu (thuong 4 · kho 9 · tu_choi 4, gồm 2 câu tấn công K13, K14; 7/17 câu từ lời người dùng) · metric: `eval/metric_spec.yaml` (6 metric)
+- Data card: `data/DATA_CARD.md` · bộ câu thử: `eval/benchmark.csv` — 30 câu (thuong 8 · kho 17 · tu_choi 5, gồm 2 câu tấn công K13, K14; 11/30 câu từ lời người dùng) · metric: `eval/metric_spec.yaml` (6 metric)
 - **Chuẩn "đạt"** (chốt **trước 19:30 Thứ Sáu 27/11**, giữ nguyên đến 23:59 Thứ Bảy 28/11): "Đạt khi ≥ 75% câu qua toàn bộ `pass_criterion`, **và** `lich_hop_le`, `so_lieu_khop_cong_cu`, `khong_bia_lich`, `tu_choi_dung` đều đạt 100%, **và** `hoi_lai_dung_luc`, `dung_so_thich` ≥ 80%."
 - Kết quả: lượt 1 __/__ (__%) · lượt 2 __/__ (__%) — run ID: __ / __ → chi tiết `eval/report.md`, hồ sơ `eval/README.md`
 
