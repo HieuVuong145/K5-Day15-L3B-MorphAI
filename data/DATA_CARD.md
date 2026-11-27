@@ -20,9 +20,9 @@
 | Thuộc tính | Nội dung |
 |---|---|
 | Dùng để làm gì | Đào bằng chứng pain người dùng (`evidence/summary.md`), tính tham số impact (`spec.md` §2), làm nguồn cho bộ câu thử (`eval/benchmark.csv`) và phân bổ persona chi phí (`cost/personas.yaml`). |
-| Từ đâu | - **Phỏng vấn trực tiếp:** 4 người dùng ngoài nhóm (`evidence/interviews/P1.md`–`P4.md`).<br>- **Khảo sát Google Form:** 28 phản hồi của người dùng ngoài nhóm (`evidence/survey/responses.csv`). |
+| Từ đâu | - **Phỏng vấn trực tiếp:** 4 người dùng ngoài nhóm (`evidence/interviews/P1.md`–`P4.md`).<br>- **Khảo sát Google Form:** 26 phản hồi của người dùng ngoài nhóm (`evidence/survey/responses.csv`). |
 | Xử lý những bước gì | Ẩn danh toàn bộ họ tên, email, số điện thoại trước khi đưa vào repo; giữ lại câu trả lời hành vi thực tế và trích dẫn phục vụ phân tích pain. |
-| Số dòng / số đoạn | - Phỏng vấn: **4** biên bản (`P1`–`P4`)<br>- Khảo sát: **28** dòng phản hồi (`evidence/survey/responses.csv`, chưa tính dòng tiêu đề) |
+| Số dòng / số đoạn | - Phỏng vấn: **4** biên bản (`P1`–`P4`)<br>- Khảo sát: **26** phản hồi (`evidence/survey/responses.csv`, chưa tính dòng tiêu đề; file có 29 dòng vì một số ô trả lời viết nhiều dòng) |
 | Phiên bản / ngày lấy | `2026-11-27` |
 | Nhãn | `thật` (đã ẩn danh). |
-| Giới hạn | Mẫu phỏng vấn (n=4) và khảo sát (n=28) còn nhỏ, thiên về nhóm bạn trẻ/gia đình trẻ, chưa phủ đều nhóm có trẻ nhỏ dưới 6 tuổi và người cao tuổi. |
+| Giới hạn | Mẫu phỏng vấn (n=4) và khảo sát (n=26) còn nhỏ, thiên về nhóm bạn trẻ/gia đình trẻ, chưa phủ đều nhóm có trẻ nhỏ dưới 6 tuổi và người cao tuổi. |
