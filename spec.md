@@ -48,29 +48,53 @@ Data BTC cấp đã dùng (nếu có — không commit nguyên file): không dù
 - App / Website của khu vui chơi (VinWonders, Sun World): đáng học ở thông tin giờ mở, bản đồ nội khu chính xác · đáng né là thông tin nằm rải rác nhiều mục, chỉ liệt kê điểm chơi chứ không tối ưu lịch theo khung giờ và túi tiền riêng · mình khác ở chỗ lọc và sắp xếp cá nhân hoá theo đúng ràng buộc của nhóm đi.
 
 ## §4. Thiết kế *(guide 2.2, 3.2)*
-- **Lát cắt MỘT CÂU** (1 người dùng · 1 việc · 1 quyết định AI · 1 kết quả):
-- Không làm (≥3 điều):
-- **Sơ đồ** (ảnh / Mermaid / draw.io): [chèn ở đây]
-- **Hình dạng:** [ ] workflow cố định · [ ] một agent · [ ] nhiều agent — 2 dòng lý do, và vì sao **không** chọn hình dạng phức tạp hơn:
+- **Lát cắt MỘT CÂU** (1 người dùng · 1 việc · 1 quyết định AI · 1 kết quả): Một gia đình (2 người lớn, 1 bé 5 tuổi) nhập ngân sách, sở thích và khung giờ cho một ngày ở một khu vui chơi; AI chọn và sắp xếp hoạt động, code kiểm các ràng buộc cứng, và gia đình nhận lịch trình từng giờ kèm tổng tiền, lý do và nguồn, hoặc lý do không xếp được cùng gợi ý nới ràng buộc.
+- Không làm: đặt vé hoặc thanh toán · lập lịch nhiều ngày · tự đổi lịch theo thời tiết hoặc sự kiện phát sinh trực tiếp · cam kết đây là phương án tối ưu tuyệt đối.
+- **Dữ liệu bắt buộc:** khu vui chơi, ngày đi, ngân sách, khung giờ, nhóm đi (tuổi và chiều cao từng người). Thiếu một mục thì hỏi lại, không đoán.
+- **Ràng buộc:** *cứng* (vi phạm thì không xuất lịch): giờ mở/giờ show, thời gian di chuyển (+ đệm), tuổi/chiều cao/yêu cầu đi cùng người lớn, ngân sách, khung giờ, nguồn còn mới. *Mềm* (chỉ ảnh hưởng độ phù hợp): sở thích, giờ ăn/nghỉ cho bé.
+- **Sơ đồ** (workflow CP2; catalog hiện dùng cho chạy thử phải được đánh dấu synthetic):
+
+  ```mermaid
+  flowchart TD
+      U["Nhập khu vui chơi, ngày đi, ngân sách, sở thích, khung giờ, nhóm đi (2 người lớn + bé 5 tuổi, chiều cao bé)"] --> V{"Đủ dữ liệu bắt buộc?"}
+      V -->|Chưa đủ| Q["Hỏi lại dữ liệu thiếu; không đoán"]
+      Q --> U
+      V -->|Đủ| T["Tra điểm chơi, lịch show và ma trận thời gian di chuyển (kèm nguồn, ngày cập nhật)"]
+      T --> A["AI chọn hoạt động và thứ tự; chỉ dùng ID có trong dữ liệu"]
+      A --> C["Code kiểm: ID hợp lệ, giờ mở/show, di chuyển + đệm, tuổi/chiều cao, ngân sách, nguồn còn mới"]
+      C -->|Hợp lệ| O["Trả lịch theo giờ, tổng tiền từ code, lý do và nguồn"]
+      C -->|Có lỗi, lần đầu| R["AI sửa theo danh sách vi phạm do code trả"]
+      R --> C
+      C -->|Vẫn lỗi hoặc thiếu căn cứ| N["Không đưa lịch; code nêu ràng buộc chưa đạt và mức cần nới"]
+      O --> E["Người dùng xem, đổi ngân sách/khung giờ/hoạt động hoặc áp dụng"]
+      N --> E
+      E -->|Đổi ràng buộc| U
+  ```
+
+- **Hình dạng:** [x] workflow cố định · [ ] một agent · [ ] nhiều agent — các bước tra cứu, đề xuất, kiểm tra và sửa có thứ tự cố định. Workflow dễ kiểm soát ràng buộc và đo hơn; một agent tự chọn công cụ hay nhiều agent không cần thiết cho một lịch trình.
 - **AI dựa vào đâu** — mỗi công cụ (khớp `codebase/tools.py`):
 
   | Công cụ | Input | Output | Tác động ra ngoài? |
   |---|---|---|---|
-  |  |  |  |  |
+  | `tra_diem_choi(khu, nhom_di)` | Khu vui chơi, nhóm đi (`{tuoi, chieu_cao_cm}` từng người) | ID hoạt động, giờ mở, giá theo loại vé, giới hạn tham gia, nguồn và ngày cập nhật | Không |
+  | `tra_lich_show(ngay)` | Ngày đi | ID show, giờ bắt đầu, thời lượng, nguồn và ngày cập nhật | Không |
+  | `uoc_thoi_gian_di(a, b)` | ID hai điểm | Số phút di chuyển; đánh dấu synthetic nếu tự dựng. Nạp sẵn thành ma trận cho các ứng viên ở bước tra cứu | Không |
+  | `kiem_lich_trinh(lich, nhom_di, khung_gio, ngan_sach)` | Các điểm/giờ dự kiến và ràng buộc nhóm | Hợp lệ/danh sách vi phạm (cứng/mềm), tổng tiền do code tính, mức cần nới nếu không đạt | Không |
 
-- **Mức tự động:** [ ] AI gợi ý, người quyết · [ ] AI tự làm khi chắc, chuyển người khi không · [ ] AI tự làm — lý do (sai thì ai chịu gì, sửa đắt hay rẻ):
-- **Chỗ chặn rủi ro** (rủi ro lớn nhất của lát cắt bị chặn ở đâu, bằng gì):
-- **Chỗ người duyệt** (việc AI không được tự làm):
+- **Mức tự động:** [x] AI gợi ý, người quyết · [ ] AI tự làm khi chắc, chuyển người khi không · [ ] AI tự làm — AI tạo bản nháp, code kiểm; gia đình quyết định có đi theo lịch hay không. Không có hành động đặt chỗ hay thanh toán.
+- **Chỗ chặn rủi ro**: model không tự tính giá hoặc tự xác nhận giờ; ràng buộc cứng và ID hợp lệ do code kiểm. Nếu thiếu dữ liệu, có vi phạm sau tối đa một lần sửa, hoặc nguồn quá cũ (> 30 ngày) hay không cụ thể, không xuất lịch như phương án hợp lệ; nêu rõ lý do. Gợi ý nới ràng buộc do code tính (ví dụ "thiếu X đồng so với ngân sách"), AI chỉ diễn đạt lại. Mỗi sự thật về giờ/giá/điều kiện phải kèm nguồn và ngày cập nhật.
+- **Chỗ người duyệt** (việc AI không được tự làm): Người dùng tự quyết có áp dụng lịch; AI không đặt vé, trả tiền, hoặc khẳng định thông tin synthetic là thông tin thật.
 - **Nguyên tắc thiết kế** (≥3, bắt buộc G10):
 
   | Nguyên tắc | Chỗ cụ thể trên sơ đồ / trong bản chạy thử |
   |---|---|
-  | G10 — thu hẹp phạm vi khi không chắc |  |
-  |  |  |
-  |  |  |
+  | G10 — thu hẹp phạm vi khi không chắc | Nút V: thiếu dữ liệu bắt buộc thì hỏi lại; nút N: không có dữ liệu/không xếp được thì dừng và nêu ràng buộc |
+  | G1/G2 — nói rõ làm được gì, làm tốt đến đâu | Nhãn synthetic/nguồn thật và ngày cập nhật trên kết quả; không gọi phương án là tối ưu tuyệt đối |
+  | G8/G9 — dễ bỏ qua, dễ sửa | Nút E: người dùng đổi ngân sách, khung giờ hoặc hoạt động, quay về U để tạo và kiểm lại |
+  | G11 — giải thích vì sao | Nút O: mỗi hoạt động có lý do gắn với sở thích/ràng buộc và nguồn; tổng tiền do code tính |
 
-- Phần nào còn giả (công cụ trả dữ liệu giả, model chế độ giả…) — ghi rõ, không giả làm thật:
-
+- **Kịch bản chạy thử tối thiểu:** (a) lịch hợp lệ ngay; (b) bản nháp vi phạm, sửa được trong 1 lần; (c) ngân sách hoặc chiều cao khiến không xếp được: hệ thống dừng và gợi ý nới. Ba kịch bản phủ cả ba nhánh của sơ đồ.
+- Phần còn giả ở CP2: catalog giờ mở, show, giá, thời lượng và thời gian di chuyển nếu nhóm tự dựng; ghi `synthetic` trong data card và trên kết quả. Model ở chế độ giả (đầu ra có kịch bản sẵn để chạy được cả ba kịch bản trên) cho đến khi nối model thật; không demo dữ liệu giả như thông tin của một khu vui chơi thật.
 ## §5. Chỗ khó — 4 lớp + ≥6 kịch bản + 2 tấn công *(guide 2.3)*
 
 | Kịch bản | Lớp (1–4) | Hành vi mong muốn (nói gì, hiện gì, cho làm gì tiếp) | Câu thử |
