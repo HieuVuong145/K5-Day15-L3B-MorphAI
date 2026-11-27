@@ -49,9 +49,9 @@ Data BTC cấp đã dùng (nếu có — không commit nguyên file): không dù
 
 ## §4. Thiết kế *(guide 2.2, 3.2)*
 - **Lát cắt MỘT CÂU** (1 người dùng · 1 việc · 1 quyết định AI · 1 kết quả): Một gia đình (2 người lớn, 1 bé 5 tuổi) nhập ngân sách, sở thích và khung giờ cho một ngày ở một khu vui chơi; AI chọn và sắp xếp hoạt động, code kiểm các ràng buộc cứng, và gia đình nhận lịch trình từng giờ kèm tổng tiền, lý do và nguồn, hoặc lý do không xếp được cùng gợi ý nới ràng buộc.
-- Không làm: đặt vé hoặc thanh toán · lập lịch nhiều ngày · tự đổi lịch theo thời tiết hoặc sự kiện phát sinh trực tiếp · cam kết đây là phương án tối ưu tuyệt đối.
+- Không làm: đặt vé hoặc thanh toán · lập lịch nhiều ngày · theo dõi thời tiết/sự kiện theo thời gian thực hoặc tự đổi lịch sau khi đã xuất · cam kết đây là phương án tối ưu tuyệt đối.
 - **Dữ liệu bắt buộc:** khu vui chơi, ngày đi, ngân sách, khung giờ, nhóm đi (tuổi và chiều cao từng người). Thiếu một mục thì hỏi lại, không đoán.
-- **Ràng buộc:** *cứng* (vi phạm thì không xuất lịch): giờ mở/giờ show, thời gian di chuyển (+ đệm), tuổi/chiều cao/yêu cầu đi cùng người lớn, ngân sách, khung giờ, nguồn còn mới. *Mềm* (chỉ ảnh hưởng độ phù hợp): sở thích, giờ ăn/nghỉ cho bé.
+- **Ràng buộc:** *cứng* (vi phạm thì không xuất lịch): giờ mở/giờ show, thời gian di chuyển (+ đệm), tuổi/chiều cao/yêu cầu đi cùng người lớn, ngân sách, khung giờ, nguồn điểm/show cập nhật trong 30 ngày. *Mềm* (chỉ ảnh hưởng độ phù hợp): sở thích, giờ ăn/nghỉ cho bé. Dự báo thời tiết chỉ được dùng khi có dữ liệu cho ngày đã chọn.
 - **Sơ đồ** (workflow CP2; catalog hiện dùng cho chạy thử phải được đánh dấu synthetic):
 
   ```mermaid
@@ -59,9 +59,9 @@ Data BTC cấp đã dùng (nếu có — không commit nguyên file): không dù
       U["Nhập khu vui chơi, ngày đi, ngân sách, sở thích, khung giờ, nhóm đi (2 người lớn + bé 5 tuổi, chiều cao bé)"] --> V{"Đủ dữ liệu bắt buộc?"}
       V -->|Chưa đủ| Q["Hỏi lại dữ liệu thiếu; không đoán"]
       Q --> U
-      V -->|Đủ| T["Tra điểm chơi, lịch show và ma trận thời gian di chuyển (kèm nguồn, ngày cập nhật)"]
+      V -->|Đủ| T["Tra điểm chơi, show, thời tiết theo ngày và thời gian di chuyển"]
       T --> A["AI chọn hoạt động và thứ tự; chỉ dùng ID có trong dữ liệu"]
-      A --> C["Code kiểm: ID hợp lệ, giờ mở/show, di chuyển + đệm, tuổi/chiều cao, ngân sách, nguồn còn mới"]
+      A --> C["Code kiểm: ID, giờ mở/show, di chuyển + đệm, tuổi/chiều cao, mưa, ngân sách, độ mới nguồn"]
       C -->|Hợp lệ| O["Trả lịch theo giờ, tổng tiền từ code, lý do và nguồn"]
       C -->|Có lỗi, lần đầu| R["AI sửa theo danh sách vi phạm do code trả"]
       R --> C
@@ -76,13 +76,17 @@ Data BTC cấp đã dùng (nếu có — không commit nguyên file): không dù
 
   | Công cụ | Input | Output | Tác động ra ngoài? |
   |---|---|---|---|
-  | `tra_diem_choi(khu, nhom_di)` | Khu vui chơi, nhóm đi (`{tuoi, chieu_cao_cm}` từng người) | ID hoạt động, giờ mở, giá theo loại vé, giới hạn tham gia, nguồn và ngày cập nhật | Không |
-  | `tra_lich_show(ngay)` | Ngày đi | ID show, giờ bắt đầu, thời lượng, nguồn và ngày cập nhật | Không |
-  | `uoc_thoi_gian_di(a, b)` | ID hai điểm | Số phút di chuyển; đánh dấu synthetic nếu tự dựng. Nạp sẵn thành ma trận cho các ứng viên ở bước tra cứu | Không |
-  | `kiem_lich_trinh(lich, nhom_di, khung_gio, ngan_sach)` | Các điểm/giờ dự kiến và ràng buộc nhóm | Hợp lệ/danh sách vi phạm (cứng/mềm), tổng tiền do code tính, mức cần nới nếu không đạt | Không |
+  | `tra_diem_choi(khu, nhom_di)` | Khu/phân khu và nhóm đi (`[{tuoi, chieu_cao_cm}]`) | Các điểm chơi từ `data/park.json`, giờ, thời lượng, phụ phí, điều kiện phù hợp/không phù hợp và nguồn; `synthetic: true` | Không |
+  | `tra_lich_show(ngay)` | Ngày dạng `YYYY-MM-DD` | Các show hoạt động theo thứ trong tuần từ `data/shows.json`, giờ, thời lượng, nguồn; `synthetic: true` | Không |
+  | `tra_thoi_tiet(ngay)` | Ngày dạng `YYYY-MM-DD` | Dự báo theo khung giờ từ `data/weather.json`, hoặc `co_du_lieu: false`; `synthetic: true` | Không |
+  | `uoc_thoi_gian_di(a, b)` | ID điểm/show hoặc tên hai khu vực | Khu đi/đến, phút di chuyển, đệm 5 phút nếu có di chuyển; ma trận `data/travel_times.csv` synthetic | Không |
+  | `tinh_tong_tien(lich, nhom_di, khung_gio=None)` | Lịch có ID, nhóm đi, khung giờ tùy chọn | So sánh vé lẻ/combo, vé sau 16:00, phụ phí và `tong_cong_vnd` từ `data/tickets.json`; được validator gọi nội bộ | Không |
+  | `kiem_lich_trinh(lich, nhom_di, khung_gio, ngan_sach, ngay=None, today=None, so_thich=None)` | Điểm có `id/start/end`, nhóm tuổi/chiều cao, khung giờ, ngân sách; ngày, ngày tham chiếu và sở thích tùy chọn | `hop_le`, vi phạm cứng/mềm, chi tiết tổng tiền, gợi ý nới; kiểm nguồn điểm/show ≤30 ngày, giờ, show, phù hợp nhóm, mưa (nếu có dữ liệu), di chuyển + đệm, ngân sách, nghỉ và sở thích | Không |
+
+  `search_example(query)` hiện vẫn có trong `tools.py` để tương thích với agent mẫu; đây không phải công cụ của workflow C1 và cần được thay bằng các công cụ trên khi nối agent. Hiện `agent.py` vẫn chỉ gọi công cụ mẫu này.
 
 - **Mức tự động:** [x] AI gợi ý, người quyết · [ ] AI tự làm khi chắc, chuyển người khi không · [ ] AI tự làm — AI tạo bản nháp, code kiểm; gia đình quyết định có đi theo lịch hay không. Không có hành động đặt chỗ hay thanh toán.
-- **Chỗ chặn rủi ro**: model không tự tính giá hoặc tự xác nhận giờ; ràng buộc cứng và ID hợp lệ do code kiểm. Nếu thiếu dữ liệu, có vi phạm sau tối đa một lần sửa, hoặc nguồn quá cũ (> 30 ngày) hay không cụ thể, không xuất lịch như phương án hợp lệ; nêu rõ lý do. Gợi ý nới ràng buộc do code tính (ví dụ "thiếu X đồng so với ngân sách"), AI chỉ diễn đạt lại. Mỗi sự thật về giờ/giá/điều kiện phải kèm nguồn và ngày cập nhật.
+- **Chỗ chặn rủi ro**: model không tự tính giá hoặc tự xác nhận giờ; `kiem_lich_trinh` kiểm ID, giờ, ngày diễn show, điều kiện nhóm, mưa khi có dữ liệu, di chuyển + đệm và ngân sách; tổng tiền do `tinh_tong_tien` tính. Nguồn điểm/show cũ hơn 30 ngày bị đánh dấu vi phạm cứng (không tự lọc khỏi danh sách); tuổi dữ liệu của vé, thời tiết và ma trận di chuyển hiện chưa được validator kiểm tra. Nếu thiếu dự báo, validator hiện bỏ qua kiểm tra mưa, nên workflow phải nói rõ chưa xác minh thời tiết. Có vi phạm sau tối đa một lần sửa thì không xuất lịch như phương án hợp lệ; nêu lỗi và gợi ý nới do code trả. Mọi dữ liệu hiện có đều `synthetic`, không phải căn cứ cho khu vui chơi thật.
 - **Chỗ người duyệt** (việc AI không được tự làm): Người dùng tự quyết có áp dụng lịch; AI không đặt vé, trả tiền, hoặc khẳng định thông tin synthetic là thông tin thật.
 - **Nguyên tắc thiết kế** (≥3, bắt buộc G10):
 
