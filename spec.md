@@ -43,7 +43,9 @@ Data BTC cấp đã dùng (nếu có — không commit nguyên file): không dù
 - Số lần / tháng của từng kiểu người dùng (dùng cho persona ở §8): đi 1 lần / tháng (P2, P4) · đi 3 lần / tháng (P3) — *(tự ước tính từ n = 3, thay bằng khảo sát câu 1)*
 
 ## §3. Giải pháp tương tự *(guide 2.1)*
-- [sản phẩm / tính năng gần giống]: một điều đáng học · một điều đáng né · mình khác gì
+- Google Maps / Apple Maps: đáng học ở ước lượng thời gian di chuyển giữa các điểm chính xác · đáng né là chỉ xem từng điểm rời rạc, không tự ghép lịch theo giờ mở cửa, giờ show hay tổng ngân sách · mình khác ở chỗ tự ghép trọn lịch 1 ngày thoả đồng thời mọi ràng buộc.
+- ChatGPT / Chatbot AI chung (P3, P4 đã dùng): đáng học ở giao diện hỏi tự nhiên, ra gợi ý nhanh · đáng né là hay bịa giờ mở/giá vé, không kiểm trùng giờ hay vượt ngân sách bằng code và không tự đổi sang điểm trong nhà khi trời mưa/lạnh · mình khác ở chỗ mọi giờ và giá lấy từ công cụ và có code kiểm tra chéo.
+- App / Website của khu vui chơi (VinWonders, Sun World): đáng học ở thông tin giờ mở, bản đồ nội khu chính xác · đáng né là thông tin nằm rải rác nhiều mục, chỉ liệt kê điểm chơi chứ không tối ưu lịch theo khung giờ và túi tiền riêng · mình khác ở chỗ lọc và sắp xếp cá nhân hoá theo đúng ràng buộc của nhóm đi.
 
 ## §4. Thiết kế *(guide 2.2, 3.2)*
 - **Lát cắt MỘT CÂU** (1 người dùng · 1 việc · 1 quyết định AI · 1 kết quả):
