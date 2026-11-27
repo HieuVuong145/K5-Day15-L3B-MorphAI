@@ -4,16 +4,18 @@
 
 **Tìm một chỗ đau thật của người dùng, thiết kế một giải pháp AI cho nó, rồi chứng minh bằng số.**
 
+> **Trang hackathon:** https://ai20k-hackathon.pages.dev — đăng ký nhóm, tìm đồng đội, nộp checkpoint, đồng hồ đếm giờ, side quest.
+
 Bài của nhóm phải cân bằng hai nửa: **tư duy sản phẩm** (đúng người dùng, đúng chỗ đau, đáng làm) và **giải pháp AI** (thiết kế công nghệ ra sao, AI dựa vào dữ liệu và công cụ nào, chạy thật được). Ba câu phải trả lời, mỗi câu bằng số:
 
 1. **Pain & impact:** ai đang đau, đau thế nào, bao nhiêu người, mỗi tháng mất bao nhiêu?
 2. **Giải pháp AI:** AI quyết định gì, dựa trên dữ liệu và công cụ nào, chọn workflow hay agent và vì sao, chặn rủi ro ở đâu, người duyệt ở đâu? Bản chạy thử phải gọi AI thật.
 3. **Đánh giá & chi phí:** giải pháp đúng được bao nhiêu trên bộ câu thử? Dùng thật ở quy mô thật của sản phẩm thì tốn bao nhiêu mỗi tháng?
 
-- Nhóm **3–5 người**, tự ghép, bầu một đội trưởng.
+- Nhóm **3–5 người**, tự ghép, bầu một đội trưởng. Chưa có nhóm: mục **Đồng đội** trên trang hackathon.
 - Khoảng **10 giờ làm thật**: chiều tối Thứ Sáu 27/11 và sáng Thứ Bảy 28/11.
 - **6 track:** A EdTech (chính khoá AI20K) · B Y tế · C Du lịch · D Thương mại điện tử · E Tài chính · F Làn khác (lĩnh vực bất kỳ, có insight từ người dùng thật).
-- BTC **không cấp API key**. Nhóm dùng gói miễn phí hoặc tài khoản của nhóm.
+- BTC **không cấp API key** cho mọi nhóm. Nhóm dùng gói miễn phí hoặc tài khoản của nhóm (một số credit API là quà của side quest trên trang hackathon).
 - Mọi kỹ thuật cần dùng, nhóm đã học trong 15 ngày giai đoạn 1. [02-guide.md](02-guide.md) chỉ rõ bước nào ôn lại ngày nào.
 
 ---
@@ -38,7 +40,7 @@ Bài của nhóm phải cân bằng hai nửa: **tư duy sản phẩm** (đúng 
 <a id="checkpoint"></a>
 ## CHECKPOINT
 
-**Mỗi checkpoint, đội trưởng nộp 1 lần qua link nộp, thay cả nhóm**, cả 4 mốc dùng cùng một mã học viên.
+**Mỗi checkpoint nộp trên [trang hackathon](https://ai20k-hackathon.pages.dev), thay cả nhóm.** Đội trưởng đăng ký nhóm một lần (tên nhóm + PIN + mã học viên đội trưởng); ai trong nhóm có PIN cũng nộp thay được. Trang ghi giờ nộp và commit của repo lúc nộp, agent tự kiểm đủ phần trong vài phút.
 - Đúng hạn và đủ phần → đủ điểm mốc. Muộn hoặc thiếu → 0 điểm mốc đó.
 - Vẫn nộp phần đã có và khai thật phần còn thiếu.
 - Tự soát trước khi nộp: bước guide ghi ở từng mốc.
@@ -51,7 +53,7 @@ Bài của nhóm phải cân bằng hai nửa: **tư duy sản phẩm** (đúng 
 - Canvas 7 dòng (`canvas.md`).
 - Link repo GitHub công khai, mở được bằng cửa sổ ẩn danh.
 
-Tự soát: [guide 1.4](02-guide.md#b1-4) · **Link nộp CP1:** `________` *(BTC cập nhật)*
+Tự soát: [guide 1.4](02-guide.md#b1-4) · **Nộp CP1:** [trang hackathon → Nộp checkpoint](https://ai20k-hackathon.pages.dev/#submit)
 
 ### CP2 · 19:30 Thứ Sáu 27/11 · 4 điểm
 
@@ -62,7 +64,7 @@ Tự soát: [guide 1.4](02-guide.md#b1-4) · **Link nộp CP1:** `________` *(BT
 - **Chuẩn "đạt" bằng số**, chép từ `spec.md` §7. **Chốt tại mốc này, không sửa về sau.**
 - Bản chạy thử dạng khung: `python run.py` đi hết luồng với AI giả.
 
-Tự soát: [guide 2.5](02-guide.md#b2-5) · **Link nộp CP2:** `________` *(BTC cập nhật)*
+Tự soát: [guide 2.5](02-guide.md#b2-5) · **Nộp CP2:** [trang hackathon → Nộp checkpoint](https://ai20k-hackathon.pages.dev/#submit)
 
 ### CP3 · 10:00 Thứ Bảy 28/11 · 4 điểm
 
@@ -73,7 +75,7 @@ Tự soát: [guide 2.5](02-guide.md#b2-5) · **Link nộp CP2:** `________` *(BT
 - Link `spec.md` đã có §0–§7.
 - Phần chưa xong, nếu có.
 
-Tự soát: [guide 3.4](02-guide.md#b3-4) · **Link nộp CP3:** `________` *(BTC cập nhật)*
+Tự soát: [guide 3.4](02-guide.md#b3-4) · **Nộp CP3:** [trang hackathon → Nộp checkpoint](https://ai20k-hackathon.pages.dev/#submit)
 
 ### CP4 · 14:30 Thứ Bảy 28/11 · 4 điểm
 
@@ -81,10 +83,10 @@ Tự soát: [guide 3.4](02-guide.md#b3-4) · **Link nộp CP3:** `________` *(BT
 - Tích 7 hạng mục bắt buộc đã có ([01-challenge-brief](01-challenge-brief.md#7-hang-muc)).
 - Kết quả lượt 1 → lượt 2 (ví dụ 14/24 → 18/24).
 - Chi phí / task thành công ở kịch bản cơ sở, kèm tên model.
-- `demo-slides.pdf` ở thư mục gốc repo + link video demo dự phòng.
+- Slide, định dạng nào cũng được (PDF, PPTX, HTML, Keynote…): file trong repo **hoặc** link slide nộp ở form CP4 (Drive, Canva, Google Slides…, ai có link cũng xem được) · link video demo dự phòng.
 - Phần chưa xong, nếu có.
 
-Tự soát: [guide 4.4](02-guide.md#b4-4) · **Link nộp CP4:** `________` *(BTC cập nhật)*
+Tự soát: [guide 4.4](02-guide.md#b4-4) · **Nộp CP4:** [trang hackathon → Nộp checkpoint](https://ai20k-hackathon.pages.dev/#submit)
 
 ### Hạn chót · 23:59 Thứ Bảy 28/11 · không nộp form
 
@@ -100,64 +102,91 @@ Hướng dẫn: [guide 5.3](02-guide.md#b5-3).
 
 | Khi nào | Ở đâu | Việc |
 |---|---|---|
-| Sáng Thứ Sáu 27/11 | Zoom | Khai mạc. **Sau buổi:** ghép nhóm · chọn track · nháp Canvas · hẹn người phỏng vấn / gửi khảo sát |
-| 16:00–19:30 Thứ Sáu 27/11 | L3A: H209 + H210 · L3B: C401 | Làm tại lớp · **CP1 17:00** · **CP2 19:30** |
-| Tối Thứ Sáu → 10:00 Thứ Bảy 28/11 | Nhóm tự làm | Nối model thật, nên xong trước khi ngủ · **CP3 10:00**. Sáng Thứ Bảy không có lớp |
-| 14:00 Thứ Bảy 28/11 | L3A: H209 + H210 + H201 · L3B: C401 + E403 | Vào phòng · **CP4 14:30** |
-| 14:30–16:00 | Theo zone | **Demo Zone:** mọi nhóm demo trong zone của mình |
-| 16:00–18:00 | Cả phòng | **Demo Phòng:** các nhóm top của mỗi zone demo trước cả phòng |
-| 23:59 Thứ Bảy 28/11 | — | **Hạn chót** |
+| Kiểm Python | `python --version` (không được thì `py --version`) | `python3 --version` |
+| Chạy bản chạy thử (chế độ giả, chưa gọi model) | `python run.py` | `python3 run.py` |
+| Kiểm bộ câu thử | `python run.py check` | `python3 run.py check` |
+| Tạo file `.env` để nối model | `copy .env.example .env` | `cp .env.example .env` |
 
----
+- Windows: gõ `python` mà mở Microsoft Store hoặc báo không có lệnh → dùng `py`. Chưa có Python: cài từ python.org, **tick "Add python.exe to PATH"**, mở lại PowerShell.
+- macOS: báo `command not found: python` là bình thường → dùng `python3`.
+- `python run.py` in ra "[câu trả lời giả — chưa nối model] …" là khung chạy đúng. Nối model thật: [docs/connect-model.md](docs/connect-model.md).
 
-## Chấm điểm
+Trong README này lệnh viết là `python …`; máy nhóm cần `python3` hay `py` thì gõ thay.
 
-**100 = 15 điểm nộp (4 checkpoint) + 85 điểm chấm bài + 5 điểm bonus**, tổng tối đa 100.
+## Lệnh
 
-| Phần | Điểm |
+| Lệnh | Làm gì |
 |---|---|
-| Bằng chứng pain (data / phỏng vấn / khảo sát) | 14 |
-| Impact có số | 11 |
-| **Giải pháp AI: thiết kế + bản chạy thử** | **16** |
-| Định nghĩa "tốt": bộ câu thử + metric | 14 |
-| Báo cáo đánh giá | 8 |
-| Mô phỏng chi phí khi dùng thật | 12 |
-| Slide & demo | 10 |
-| *Bonus:* người dùng thử | +5 |
+| `python run.py` | Chạy bản chạy thử (gõ đầu vào, nhận kết quả, kèm số lần gọi model / token) |
+| `python run.py check` | Kiểm `eval/benchmark.csv` (6 cột, số câu, `kho` / `tu_choi`, mã `source`, ô trống, dòng mẫu) `eval/metric_spec.yaml` (≥3 metric điền đủ) và `TEAMS.md` (đúng format để BTC quét). Chỉ cảnh báo, không sửa file |
+| `python run.py eval --try` | **Thử nối model:** chạy 3 câu đầu (`--try 5` = 5 câu) → `eval/run-try.csv`. Thấy "Nối model được" là xong. Không tính là một lượt |
+| `python run.py eval` | Chạy cả bộ qua `codebase/agent.py` → `eval/run-1.csv` (lần sau `run-2.csv`…) + `traces/run-1.jsonl`. Mỗi dòng có run ID, model, số lần gọi model / công cụ, token. Model còn giả → chỉ ghi `run-mock.csv`; mọi câu lỗi → `run-error.csv`; Ctrl+C → `run-stopped.csv` — đều **không** được đánh số |
+| `python run.py eval --fake` | Thử riêng bộ chạy, không gọi agent → `eval/run-fake.csv` |
+| `python run.py score eval/run-1.csv` | Sau khi điền cột `pass` (1 / 0): in % đạt tổng và theo `type`. Còn ô trống → "CHƯA CHẤM XONG", không in % |
+| `python run.py simulate --try` | Thử mô phỏng chi phí 10 phiên (làm trước CP3) → `cost/simulate-try.csv` |
+| `python run.py simulate` | Mô phỏng chi phí khi dùng thật theo `cost/personas.yaml` (≥50 phiên) → `cost/simulate-N.csv` + `cost/simulate-N-summary.md` |
+| `python run.py simulate --rate-from eval/run-2.csv` | Như trên, lấy tỉ lệ đạt từ đúng lượt chỉ định. Không ghi thì khung lấy lượt `run-N` mới nhất đã chấm, cùng model, và ghi rõ đã lấy lượt nào trong bản tóm tắt |
 
-- **Không xét giải** nếu thiếu: bản chạy thử gọi AI thật · bằng chứng pain ≥1 nguồn · bộ câu thử ≥20 câu có % đạt · slide PDF.
-- **Kết quả thấp mà trung thực vẫn được đủ điểm.** Số bị sửa hoặc giấu (ví dụ đổi chuẩn "đạt" sau CP2, bỏ câu thử trượt) → phần đó 0 điểm.
-- Chi tiết từng tiêu chí: [03-rubric.md](03-rubric.md).
+Gói miễn phí báo hết lượt: thêm `--wait 4` sau `eval` hoặc `simulate` (nghỉ 4 giây giữa hai lượt gọi). Sửa CSV bằng Excel: *File → Save As → CSV UTF-8*; Google Sheets: *Tệp → Tải xuống → CSV*.
 
-## Thể thức và giải
+**Lượt có lỗi kỹ thuật** (cột `error` có chữ): không sửa tay file đó, chạy lại thành lượt mới và ghi vào bảng các lượt ở `eval/README.md`. Không xoá file lượt nào.
 
-Công bố sau.
+Nhóm dùng stack khác (Node, Streamlit, notebook…): sửa hàm `run_app()` trong `run.py` để `python run.py` vẫn chạy được bản chạy thử, và giữ `answer()` trong `codebase/agent.py` để `eval`, `simulate` chạy được.
 
----
+## Bản chạy thử — viết ở đâu
 
-## Luật chung
+| File | Viết gì | Bước guide |
+|---|---|---|
+| `codebase/agent.py` | `answer(text)` — luồng chính, đúng hình dạng ở `spec.md` §4. Khung có sẵn một workflow 2 bước *ví dụ* | 3.2 |
+| `codebase/tools.py` | Công cụ của bài toán, mỗi công cụ một hàm có `@tool` | 2.2, 3.2 |
+| `codebase/ai.py` | `call_model(system, user)` — chỗ duy nhất gọi model. Chưa điền `.env` thì chạy **chế độ giả** | 3.3 |
 
-1. **Dùng AI để build thoải mái**, nhưng mỗi người phải giải thích được phần có tên mình. Không giải thích được thì phần đó 0 điểm. Ghi 2–3 dòng "dùng AI vào việc gì" trong `docs/ai-usage.md`.
-2. **Chuẩn "đạt" chốt tại CP2**, giữ nguyên đến hạn chót.
-3. **Sau CP4** được sửa code, báo cáo, slide, và ghi changelog (`spec.md` §10). **Không** sửa chuẩn "đạt", câu thử trong bộ, số liệu bằng chứng, kết quả các lượt đã chạy. Chạy thêm thì ghi thành lượt mới.
-4. **Giải** xét trên bản CP4 + phần demo. **Điểm lab** chấm trên commit cuối trước 23:59 Thứ Bảy 28/11.
-5. **Đổi track** được trước CP2: báo lab coach và ghi trong lần nộp CP2. Sau CP2 chỉ được thu hẹp lát cắt.
-6. **Không commit API key** (để trong `.env`). Repo có API key hoặc dữ liệu cá nhân thật → **trừ 10 điểm**, gỡ ngay. Thông tin thành viên trong `TEAMS.md` là bắt buộc, không tính vào lỗi này. Luật dùng dữ liệu: [01-challenge-brief → Dữ liệu](01-challenge-brief.md#data).
+- **Trước CP2:** để chế độ giả, công cụ trả dữ liệu giả — `python run.py` đi hết luồng là đủ.
+- **Trước CP3:** nối model thật theo [docs/connect-model.md](docs/connect-model.md), `eval --try` thấy token > 0 rồi mới `eval`.
+- Bộ chạy gửi **nguyên ô `input`** của câu thử vào `answer(text)`. Dữ liệu nền (bài học, thông báo, lịch…) để trong `data/`, đọc qua công cụ.
 
-## Nộp bài
+## Phần nào thật, phần nào giả
 
-1. **Tạo repo công khai, chép thư mục [starter-repo/](starter-repo/README.md) vào.**
-2. **Tên repo:** `K5-Day15-<lớp>-<tên nhóm>`, ví dụ `K5-Day15-L3A-StudyPulse`. Tên nhóm viết liền, không dấu.
-3. **Kiểm công khai:** mở link repo bằng cửa sổ ẩn danh, mở được mới đúng.
-4. **`TEAMS.md` ở thư mục gốc repo:** ghi đầy đủ thành viên, mã học viên, vai trò, phần việc, theo đúng mẫu có sẵn trong [starter-repo/TEAMS.md](starter-repo/TEAMS.md). **Khi chấm và đánh giá, BTC quét file này để ghép điểm cho từng người, nên phải làm đúng format.** Kiểm bằng `python run.py check`.
+| Thành phần | Thật / Giả | Ghi chú |
+|---|---|---|
+| Lời gọi AI ở quyết định trung tâm | **Thật** (bắt buộc từ CP3) | Model: ____ |
+|  |  |  |
 
-## Kẹt thì hỏi ai
+## Dùng AI vào việc gì
 
-- Tại lớp (chiều Thứ Sáu, buổi demo Thứ Bảy): **lab coach của zone**.
-- Ngoài giờ lớp, kể cả sáng Thứ Bảy: kênh hỗ trợ, BTC thông báo lúc khai mạc.
-- Kẹt kỹ thuật quá **20 phút** thì hỏi ngay, đừng ngồi một mình.
-- Câu hỏi hay gặp: [02-guide → Hỏi nhanh](02-guide.md#hoi-nhanh).
+2–3 dòng (bắt buộc): nhóm dùng công cụ AI nào để làm gì, người kiểm lại phần nào. Chi tiết: [docs/ai-usage.md](docs/ai-usage.md). Coding agent đọc [AGENTS.md](AGENTS.md).
 
----
+____
 
-**Đọc tiếp:** [01-challenge-brief.md](01-challenge-brief.md) → chọn track ở [tracks/](tracks/README.md) → làm theo [02-guide.md](02-guide.md).
+## File mẫu — điền ở bước nào
+
+| File | Điền ở bước guide | Mốc |
+|---|---|---|
+| `TEAMS.md` | 1.0 | CP1 · **đúng format**, BTC quét khi chấm |
+| `canvas.md` | 1.4 | CP1, cập nhật CP2 |
+| `evidence/hypothesis.md` | 1.1 | trước khi tìm bằng chứng |
+| `evidence/data-mining.md` · `evidence/interviews/TEMPLATE.md` → `P1.md`… · `evidence/survey/TEMPLATE.md` | 1.2 | bắt đầu sau Zoom, xong CP3 |
+| `evidence/summary.md` | 1.2 | CP3 |
+| `spec.md` | §0–§2: 1.1–1.3 · §3–§5: 2.1–2.3 · §7: 2.4 · §8: 4.2 · §10: suốt | §7 chốt CP2 · §0–§7 CP3 · đủ CP4 |
+| `data/DATA_CARD.md` | 2.4 | bản đầu CP2 |
+| `eval/benchmark.csv` · `eval/metric_spec.yaml` | 2.4 | ≥10 câu + metric chốt CP2 · 20–30 câu CP3 |
+| `codebase/` | 3.2, 3.3 | khung CP2 · AI thật CP3 |
+| `eval/report.md` · `eval/README.md` | 4.1 (README mục 1–4 từ 2.4) | CP4 |
+| `cost/personas.yaml` · `cost/cost-estimate.md` | 4.2 | thử 10 phiên CP3 · đủ CP4 |
+| `validation/log.md` *(bonus)* | 4.3 | CP4 |
+| `slides/outline.md` → `demo-slides.pdf` | 5.1 | CP4 |
+| `reflection/TEMPLATE.md` → `reflection/<ten>.md` | 5.3 | 23:59 Thứ Bảy 28/11 |
+| `AGENTS.md` · `docs/ai-usage.md` | khi dùng coding agent / AI | suốt |
+
+## Bảy hạng mục bắt buộc — nằm ở file nào
+
+| # | Hạng mục | File |
+|---|---|---|
+| 1 | Bằng chứng pain | `evidence/` (tổng hợp ở `evidence/summary.md`) |
+| 2 | Impact có số | `spec.md` §2 |
+| 3 | Thiết kế giải pháp | `spec.md` §4 |
+| 4 | Bản chạy thử làm trọn lát cắt | `codebase/` · lệnh ở mục "Lệnh" |
+| 5 | Định nghĩa "tốt" + bộ câu thử | `data/DATA_CARD.md` · `eval/` |
+| 6 | Mô phỏng chi phí khi dùng thật | `cost/` |
+| 7 | Slide + demo + video dự phòng | slide trong repo (PDF, PPTX, HTML…) hoặc link slide ở form CP4 · link video: ____ |
+| + | *Bonus:* người dùng thử | `validation/log.md` |

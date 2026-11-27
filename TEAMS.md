@@ -4,16 +4,17 @@
 > Giữ nguyên tên file `TEAMS.md` ở thư mục gốc repo, giữ nguyên các dòng `- Tên nhóm:` … và tiêu đề cột của bảng. Chỉ thay chỗ `____`.
 > Kiểm bằng `python run.py check`: phần "Kiểm TEAMS.md" không báo gì là đúng format.
 
-- Tên nhóm: ____
-- Lớp: ____
-- Track: ____
-- Link repo: ____
+- Tên nhóm: MorphAI
+- Lớp: L3B
+- Track: C
+- Link repo: https://github.com/HieuVuong145/K5-Day15-L3B-MorphAI
 
 | STT | Họ và tên | Mã học viên | Vai trò | Phần việc chính |
 |---|---|---|---|---|
-| 1 | ____ | ____ | Đội trưởng | ____ |
-| 2 | ____ | ____ | Thành viên | ____ |
-| 3 | ____ | ____ | Thành viên | ____ |
+| 1 | Vương Toàn Minh Hiếu | 2A202603853 | Đội trưởng |Bằng chứng, slide, phỏng vấn, impact |
+| 2 | Vũ Quang Thanh | 2A202603736 | Thành viên | Data · công cụ · chi phí |
+| 3 | Nguyễn Đình Trường | 2A202603837 | Thành viên | Build AI|
+| 4 | Nguyễn Mạnh Cường | 2A202603904 | Thành viên | Đánh giá |
 
 **Quy tắc điền**
 - **Lớp:** `L3A` hoặc `L3B`. **Track:** một chữ `A` (EdTech), `B` (Y tế), `C` (Du lịch), `D` (Thương mại điện tử), `E` (Tài chính) hoặc `F` (Làn khác). **Link repo:** link GitHub công khai của nhóm.

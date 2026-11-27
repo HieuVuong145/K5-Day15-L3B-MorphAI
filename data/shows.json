@@ -1,0 +1,168 @@
+[
+  {
+    "id": "S01",
+    "name": "Diễu Hành Sắc Màu Cổ Tích",
+    "park": "Khu vui chơi Mẫu",
+    "zone": "Pho_Co_Tich",
+    "start": "10:30",
+    "duration_min": 25,
+    "days": [
+      "Mon",
+      "Tue",
+      "Wed",
+      "Thu",
+      "Fri",
+      "Sat",
+      "Sun"
+    ],
+    "indoor": false,
+    "cancel_on_rain": true,
+    "source": "synthetic (tham chiếu khung giờ/giá VinWonders Nha Trang, xem 2026-11-27)",
+    "updated_at": "2026-11-27",
+    "synthetic": true
+  },
+  {
+    "id": "S02",
+    "name": "Show Biểu Diễn Cá Heo & Hải Cẩu",
+    "park": "Khu vui chơi Mẫu",
+    "zone": "Thuy_Cung_Bien",
+    "start": "11:00",
+    "duration_min": 30,
+    "days": [
+      "Mon",
+      "Tue",
+      "Wed",
+      "Thu",
+      "Fri",
+      "Sat",
+      "Sun"
+    ],
+    "indoor": true,
+    "cancel_on_rain": false,
+    "source": "synthetic (tham chiếu khung giờ/giá VinWonders Nha Trang, xem 2026-11-27)",
+    "updated_at": "2026-11-27",
+    "synthetic": true
+  },
+  {
+    "id": "S03",
+    "name": "Rối Nước Kể Chuyện Dân Gian",
+    "park": "Khu vui chơi Mẫu",
+    "zone": "Cong_Chinh",
+    "start": "14:00",
+    "duration_min": 30,
+    "days": [
+      "Mon",
+      "Tue",
+      "Wed",
+      "Thu",
+      "Fri",
+      "Sat",
+      "Sun"
+    ],
+    "indoor": true,
+    "cancel_on_rain": false,
+    "source": "synthetic (tham chiếu khung giờ/giá VinWonders Nha Trang, xem 2026-11-27)",
+    "updated_at": "2026-11-27",
+    "synthetic": true
+  },
+  {
+    "id": "S04",
+    "name": "Vũ Điệu Nhiệt Đới Bên Hồ Sóng",
+    "park": "Khu vui chơi Mẫu",
+    "zone": "Cong_Vien_Nuoc",
+    "start": "14:30",
+    "duration_min": 25,
+    "days": [
+      "Sat",
+      "Sun"
+    ],
+    "indoor": false,
+    "cancel_on_rain": true,
+    "source": "synthetic (tham chiếu khung giờ/giá VinWonders Nha Trang, xem 2026-11-27)",
+    "updated_at": "2026-11-27",
+    "synthetic": true
+  },
+  {
+    "id": "S05",
+    "name": "Show Cho Cá Mập Ăn Dưới Thủy Cung",
+    "park": "Khu vui chơi Mẫu",
+    "zone": "Thuy_Cung_Bien",
+    "start": "15:30",
+    "duration_min": 25,
+    "days": [
+      "Mon",
+      "Tue",
+      "Wed",
+      "Thu",
+      "Fri",
+      "Sat",
+      "Sun"
+    ],
+    "indoor": true,
+    "cancel_on_rain": false,
+    "source": "synthetic (tham chiếu khung giờ/giá VinWonders Nha Trang, xem 2026-11-27)",
+    "updated_at": "2026-11-27",
+    "synthetic": true
+  },
+  {
+    "id": "S06",
+    "name": "Xiếc Tạp Kỹ Trong Nhà Hát Lớn",
+    "park": "Khu vui chơi Mẫu",
+    "zone": "Cong_Chinh",
+    "start": "16:30",
+    "duration_min": 35,
+    "days": [
+      "Mon",
+      "Tue",
+      "Wed",
+      "Thu",
+      "Fri",
+      "Sat",
+      "Sun"
+    ],
+    "indoor": true,
+    "cancel_on_rain": false,
+    "source": "synthetic (tham chiếu khung giờ/giá VinWonders Nha Trang, xem 2026-11-27)",
+    "updated_at": "2026-11-27",
+    "synthetic": true
+  },
+  {
+    "id": "S07",
+    "name": "Lễ Hội Ánh Sáng & Nhạc Nước Cuối Tuần",
+    "park": "Khu vui chơi Mẫu",
+    "zone": "Cong_Chinh",
+    "start": "18:30",
+    "duration_min": 30,
+    "days": [
+      "Sat",
+      "Sun"
+    ],
+    "indoor": false,
+    "cancel_on_rain": true,
+    "source": "synthetic (tham chiếu khung giờ/giá VinWonders Nha Trang, xem 2026-11-27)",
+    "updated_at": "2026-11-27",
+    "synthetic": true
+  },
+  {
+    "id": "S08",
+    "name": "Tata Show Đa Phương Tiện",
+    "park": "Khu vui chơi Mẫu",
+    "zone": "Cong_Chinh",
+    "start": "19:30",
+    "duration_min": 35,
+    "days": [
+      "Mon",
+      "Tue",
+      "Wed",
+      "Thu",
+      "Fri",
+      "Sat",
+      "Sun"
+    ],
+    "indoor": false,
+    "cancel_on_rain": true,
+    "source": "synthetic (tham chiếu khung giờ/giá VinWonders Nha Trang, xem 2026-11-27)",
+    "updated_at": "2026-11-27",
+    "synthetic": true
+  }
+]
