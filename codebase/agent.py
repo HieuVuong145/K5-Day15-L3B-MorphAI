@@ -127,24 +127,30 @@ def _extract_request(text: str):
         return None
 
 
-def _schedule_from_model(user_prompt: str):
+def _schedule_from_model(user_prompt: str, fake_schedule: list):
+    response = call_model(SYSTEM, user_prompt)
+    if response.get("model") == "fake":
+        note("AI giả: dùng lịch mẫu cố định cho kịch bản chạy thử")
+        return fake_schedule, True
     try:
-        result = _decode_json(call_model(SYSTEM, user_prompt)["text"])
+        result = _decode_json(response["text"])
     except ValueError:
-        return None
+        return None, False
     schedule = result.get("lich")
     if not isinstance(schedule, list) or any(
         not isinstance(item, dict)
         or not all(key in item for key in ("id", "start", "end"))
         for item in schedule
     ):
-        return None
-    return schedule
+        return None, False
+    return schedule, False
 
 
 def _format_result(schedule: list, validation: dict, by_id: dict, request: dict,
-                   weather: dict) -> str:
+                   weather: dict, fake_model: bool = False) -> str:
     lines = ["Lịch trình gợi ý cho %s ngày %s:" % (request["khu"], request["ngay"])]
+    if fake_model:
+        lines.append("Kịch bản AI giả: lịch mẫu cố định để chạy thử, không phải đề xuất từ model thật.")
     for item in schedule:
         meta = by_id.get(item["id"], {})
         lines.append(
@@ -213,7 +219,17 @@ def answer(text: str) -> dict:
         "Yêu cầu: %s\nDữ liệu: %s"
         % (json.dumps(request, ensure_ascii=False), json.dumps(data, ensure_ascii=False))
     )
-    schedule = _schedule_from_model(planner_prompt)
+    demo_schedule = [
+        {"id": "P09", "start": "09:15", "end": "10:00", "ly_do": "phù hợp sở thích"},
+        {"id": "P26", "start": "11:00", "end": "12:00", "ly_do": "dành thời gian ăn và nghỉ"},
+        {"id": "P13", "start": "13:00", "end": "13:50", "ly_do": "hoạt động trong nhà"},
+        {"id": "S05", "start": "15:30", "end": "15:55", "ly_do": "show có trong lịch ngày đã chọn"},
+    ]
+    available_ids = {item["id"] for item in items}
+    if not all(item["id"] in available_ids for item in demo_schedule):
+        demo_schedule = []
+
+    schedule, fake_model = _schedule_from_model(planner_prompt, demo_schedule)
     if schedule is None:
         note("dừng: model không trả lịch đúng cấu trúc")
         return {"output": "Không thể lập lịch vì model không trả về danh sách hoạt động đúng cấu trúc; chưa có lịch nào được xác nhận."}
@@ -243,7 +259,8 @@ def answer(text: str) -> dict:
                 json.dumps(validation, ensure_ascii=False),
             )
         )
-        revised = _schedule_from_model(repair_prompt)
+        revised, repair_used_fake = _schedule_from_model(repair_prompt, demo_schedule)
+        fake_model = fake_model or repair_used_fake
         if revised:
             schedule = revised
             validation = kiem_lich_trinh(
@@ -262,6 +279,8 @@ def answer(text: str) -> dict:
         errors = [item["chi_tiet"] for item in validation["vi_pham_cung"]]
         suggestions = validation["goi_y_noi"]
         lines = ["Không thể đưa lịch này như một phương án hợp lệ."]
+        if fake_model:
+            lines.append("Kịch bản AI giả: lịch mẫu cố định để chạy thử, không phải đề xuất từ model thật.")
         lines.extend("Ràng buộc chưa đạt: " + error for error in errors)
         if suggestions:
             lines.append("Gợi ý nới hoặc điều chỉnh: " + " ".join(suggestions))
@@ -271,4 +290,4 @@ def answer(text: str) -> dict:
 
     note("hoàn tất: code xác nhận các ràng buộc cứng")
     by_id = {item["id"]: item for item in items}
-    return {"output": _format_result(schedule, validation, by_id, request, weather)}
+    return {"output": _format_result(schedule, validation, by_id, request, weather, fake_model)}
