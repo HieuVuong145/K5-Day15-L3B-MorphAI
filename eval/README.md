@@ -38,7 +38,7 @@ Dữ liệu chạy thử là bộ catalog `synthetic` của **Khu vui chơi Mẫ
 
 | Lượt | Run ID | Model | Cấu hình (prompt / công cụ / thay đổi) | Đạt / tổng | % | Đạt chuẩn? |
 |---|---|---|---|---|---|---|
-| 1 | | | | __/__ | | |
+| 1 | `run-1@20261127-235116` | `gpt-4o-mini` | Bản nối model đầu (bắt buộc nêu tên khu; sửa tối đa 1 vòng) | 6/30 | 20% | Chưa (`thuong` 0/8 · `kho` 3/17 · `tu_choi` 3/5) |
 | 2 | | | | __/__ | | |
 
 Lượt chạy lại vì lỗi kỹ thuật, lượt sau CP4: ghi thêm dòng, không sửa dòng cũ.
