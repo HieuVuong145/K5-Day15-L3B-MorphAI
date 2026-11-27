@@ -11,10 +11,10 @@
 
 | STT | Họ và tên | Mã học viên | Vai trò | Phần việc chính |
 |---|---|---|---|---|
-| 1 | Vương Toàn Minh Hiếu | 2A202603853 | Đội trưởng | ____ |
-| 2 | Vũ Quang Thanh | 2A202603736 | Thành viên | ____ |
-| 3 | Nguyễn Đình Trường | 2A202603837 | Thành viên | ____ |
-| 4 | Nguyễn Mạnh cường | 2A202603904 | Thành viên | ____ |
+| 1 | Vương Toàn Minh Hiếu | 2A202603853 | Đội trưởng |Bằng chứng, slide, phỏng vấn, impact |
+| 2 | Vũ Quang Thanh | 2A202603736 | Thành viên | Data · công cụ · chi phí |
+| 3 | Nguyễn Đình Trường | 2A202603837 | Thành viên | Build AI|
+| 4 | Nguyễn Mạnh Cường | 2A202603904 | Thành viên | Đánh giá |
 
 **Quy tắc điền**
 - **Lớp:** `L3A` hoặc `L3B`. **Track:** một chữ `A` (EdTech), `B` (Y tế), `C` (Du lịch), `D` (Thương mại điện tử), `E` (Tài chính) hoặc `F` (Làn khác). **Link repo:** link GitHub công khai của nhóm.
