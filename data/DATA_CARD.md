@@ -15,14 +15,14 @@
 | Kiểm tra thủ công | Người sinh & kiểm: **Thanh** — đã kiểm tay toàn bộ 28 điểm, 8 show, bảng vé, ma trận 7×7, 5 ngày thời tiết và xác nhận qua `tests/test_tools.py` (9/9 test pass). |
 | Giới hạn | Dữ liệu giả lập chưa mô phỏng thời gian xếp hàng thực tế tại từng trò, thay đổi giá theo mùa/đại lý, hoặc bảo trì đột xuất ngoài lịch mẫu. |
 
-## Dataset 2 · Dữ liệu người dùng thực tế (Phỏng vấn, Khảo sát & Review Google Maps)
+## Dataset 2 · Dữ liệu người dùng thực tế (Phỏng vấn & Khảo sát)
 
 | Thuộc tính | Nội dung |
 |---|---|
 | Dùng để làm gì | Đào bằng chứng pain người dùng (`evidence/summary.md`), tính tham số impact (`spec.md` §2), làm nguồn cho bộ câu thử (`eval/benchmark.csv`) và phân bổ persona chi phí (`cost/personas.yaml`). |
-| Từ đâu | - **Phỏng vấn trực tiếp:** 4 người dùng ngoài nhóm (`evidence/interviews/P1.md`–`P4.md`).<br>- **Khảo sát Google Form:** 28 phản hồi của người dùng ngoài nhóm (`evidence/survey/responses.csv`).<br>- **Review công khai Google Maps:** đang tổng hợp ở `evidence/data-mining.md` (3 khu vui chơi lớn, không lưu tên người viết). |
+| Từ đâu | - **Phỏng vấn trực tiếp:** 4 người dùng ngoài nhóm (`evidence/interviews/P1.md`–`P4.md`).<br>- **Khảo sát Google Form:** 28 phản hồi của người dùng ngoài nhóm (`evidence/survey/responses.csv`). |
 | Xử lý những bước gì | Ẩn danh toàn bộ họ tên, email, số điện thoại trước khi đưa vào repo; giữ lại câu trả lời hành vi thực tế và trích dẫn phục vụ phân tích pain. |
-| Số dòng / số đoạn | - Phỏng vấn: **4** biên bản (`P1`–`P4`)<br>- Khảo sát: **28** dòng phản hồi (`evidence/survey/responses.csv`, chưa tính dòng tiêu đề)<br>- Review Google Maps: *(đang tổng hợp tiếp ở `evidence/data-mining.md` cho mốc CP3)* |
+| Số dòng / số đoạn | - Phỏng vấn: **4** biên bản (`P1`–`P4`)<br>- Khảo sát: **28** dòng phản hồi (`evidence/survey/responses.csv`, chưa tính dòng tiêu đề) |
 | Phiên bản / ngày lấy | `2026-11-27` |
 | Nhãn | `thật` (đã ẩn danh). |
-| Giới hạn | Mẫu phỏng vấn (n=4) và khảo sát (n=28) còn nhỏ, thiên về nhóm bạn trẻ/gia đình trẻ, chưa phủ đều nhóm có trẻ nhỏ dưới 6 tuổi và người cao tuổi; dữ liệu review Google Maps cần gắn nhãn đủ mẫu trước CP3. |
+| Giới hạn | Mẫu phỏng vấn (n=4) và khảo sát (n=28) còn nhỏ, thiên về nhóm bạn trẻ/gia đình trẻ, chưa phủ đều nhóm có trẻ nhỏ dưới 6 tuổi và người cao tuổi. |
