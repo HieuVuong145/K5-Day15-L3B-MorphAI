@@ -1,0 +1,138 @@
+{
+  "park": "Khu vui chơi Mẫu",
+  "source": "synthetic (mẫu thời tiết chạy thử)",
+  "updated_at": "2026-11-27",
+  "synthetic": true,
+  "days": {
+    "2026-11-28": {
+      "weekday": "Sat",
+      "summary": "Sáng nắng, chiều mưa vừa",
+      "slots": [
+        {
+          "start": "08:30",
+          "end": "12:00",
+          "status": "nang"
+        },
+        {
+          "start": "12:00",
+          "end": "14:00",
+          "status": "nang"
+        },
+        {
+          "start": "14:00",
+          "end": "17:00",
+          "status": "mua"
+        },
+        {
+          "start": "17:00",
+          "end": "20:00",
+          "status": "nang"
+        }
+      ]
+    },
+    "2026-11-29": {
+      "weekday": "Sun",
+      "summary": "Nắng đẹp cả ngày",
+      "slots": [
+        {
+          "start": "08:30",
+          "end": "12:00",
+          "status": "nang"
+        },
+        {
+          "start": "12:00",
+          "end": "14:00",
+          "status": "nang"
+        },
+        {
+          "start": "14:00",
+          "end": "17:00",
+          "status": "nang"
+        },
+        {
+          "start": "17:00",
+          "end": "20:00",
+          "status": "nang"
+        }
+      ]
+    },
+    "2026-11-30": {
+      "weekday": "Mon",
+      "summary": "Mưa lớn cả ngày",
+      "slots": [
+        {
+          "start": "08:30",
+          "end": "12:00",
+          "status": "mua"
+        },
+        {
+          "start": "12:00",
+          "end": "14:00",
+          "status": "mua"
+        },
+        {
+          "start": "14:00",
+          "end": "17:00",
+          "status": "mua"
+        },
+        {
+          "start": "17:00",
+          "end": "20:00",
+          "status": "mua"
+        }
+      ]
+    },
+    "2026-12-01": {
+      "weekday": "Tue",
+      "summary": "Nắng nhẹ cả ngày",
+      "slots": [
+        {
+          "start": "08:30",
+          "end": "12:00",
+          "status": "nang"
+        },
+        {
+          "start": "12:00",
+          "end": "14:00",
+          "status": "nang"
+        },
+        {
+          "start": "14:00",
+          "end": "17:00",
+          "status": "nang"
+        },
+        {
+          "start": "17:00",
+          "end": "20:00",
+          "status": "nang"
+        }
+      ]
+    },
+    "2026-12-02": {
+      "weekday": "Wed",
+      "summary": "Nắng đẹp cả ngày",
+      "slots": [
+        {
+          "start": "08:30",
+          "end": "12:00",
+          "status": "nang"
+        },
+        {
+          "start": "12:00",
+          "end": "14:00",
+          "status": "nang"
+        },
+        {
+          "start": "14:00",
+          "end": "17:00",
+          "status": "nang"
+        },
+        {
+          "start": "17:00",
+          "end": "20:00",
+          "status": "nang"
+        }
+      ]
+    }
+  }
+}
