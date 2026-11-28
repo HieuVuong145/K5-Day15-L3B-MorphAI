@@ -386,13 +386,100 @@ def grade_so_lieu_khop_cong_cu(case_id: str, input_text: str, output: str, event
     return True, ""
 
 
+_PREFERENCE_LABELS = {
+    "nuoc": "trò nước",
+    "dong_vat": "động vật",
+    "trong_nha": "hoạt động trong nhà",
+    "cam_giac_manh": "hoạt động cảm giác mạnh",
+    "tre_em": "hoạt động cho trẻ em",
+    "ngam_canh": "ngắm cảnh",
+    "an_uong": "ăn uống",
+    "nghi_ngoi": "nghỉ ngơi",
+    "show": "show",
+}
+
+
+def _minute_string(value: int) -> str:
+    return "%02d:%02d" % (value // 60, value % 60)
+
+
+def _time_minutes(value: str) -> int:
+    hours, minutes = value.split(":")
+    return int(hours) * 60 + int(minutes)
+
+
+def _has_feasible_preference(case_params: dict, tag: str) -> bool:
+    park = _load_json("park.json")
+    shows_data = _load_json("shows.json")
+    shows = shows_data.get("shows", []) if isinstance(shows_data, dict) else shows_data
+    candidates = [
+        (item, "park")
+        for item in park
+        if tag in item.get("tags", [])
+    ] + [
+        (item, "show")
+        for item in shows
+        if tag == "show" or tag in item.get("tags", [])
+    ]
+    window = case_params["khung_gio"]
+    start_limit = _time_minutes(window["start"])
+    end_limit = _time_minutes(window["end"])
+
+    for item, kind in candidates:
+        if kind == "park":
+            start = max(
+                start_limit,
+                _time_minutes(item["open"]),
+            )
+            end = start + item["duration_min"]
+            close = _time_minutes(item["close"])
+            if end > min(end_limit, close):
+                continue
+        else:
+            start = _time_minutes(item["start"])
+            end = start + item["duration_min"]
+            if start < start_limit or end > end_limit:
+                continue
+
+        validation = kiem_lich_trinh(
+            [{"id": item["id"], "start": _minute_string(start), "end": _minute_string(end)}],
+            case_params["nhom_di"],
+            window,
+            10**12,
+            ngay=case_params["ngay"],
+        )
+        if validation["hop_le"]:
+            return True
+    return False
+
+
+def _explains_unavailable_preference(tag: str, output: str) -> bool:
+    text = output.casefold()
+    label = _PREFERENCE_LABELS.get(tag, tag)
+    names = {
+        "nuoc": ("nước", "trò nước"),
+        "dong_vat": ("động vật", "thú"),
+        "trong_nha": ("trong nhà", "tránh mưa"),
+        "cam_giac_manh": ("cảm giác mạnh", "mạo hiểm", "tàu lượn"),
+        "tre_em": ("trẻ em", "trẻ"),
+        "ngam_canh": ("ngắm cảnh",),
+        "an_uong": ("ăn uống", "cà phê"),
+        "nghi_ngoi": ("nghỉ ngơi",),
+        "show": ("show",),
+    }.get(tag, (label,))
+    mentions_preference = any(name in text for name in names)
+    gives_reason = any(
+        phrase in text
+        for phrase in ("không đáp ứng", "chưa đáp ứng", "không khả dụng", "đã đóng", "bị loại", "do mưa", "không có")
+    )
+    return mentions_preference and gives_reason
+
+
 def grade_dung_so_thich(case_id: str, output: str):
     params = CASE_PARAMS.get(case_id)
     if not params or not params.get("so_thich"):
         return True, ""
     lich = extract_lich(output)
-    if not lich:
-        return True, ""  # trường hợp mưa cả ngày K10 không còn điểm phù hợp
     park = _load_json("park.json")
     shows = _load_json("shows.json")
     tags_by_id = {p["id"]: set(p.get("tags", [])) for p in park}
@@ -400,9 +487,14 @@ def grade_dung_so_thich(case_id: str, output: str):
         tags_by_id[s["id"]] = set(s.get("tags", [])) | {"show"}
 
     present_tags = set()
-    for item in lich:
+    for item in lich or []:
         present_tags |= tags_by_id.get(item.get("id", ""), set())
-    missing = [t for t in params["so_thich"] if t not in present_tags]
+    missing = []
+    for tag in params["so_thich"]:
+        if tag in present_tags:
+            continue
+        if _has_feasible_preference(params, tag) or not _explains_unavailable_preference(tag, output):
+            missing.append(tag)
     if missing:
         return False, "Thiếu sở thích trong lịch: %s" % ", ".join(missing)
     return True, ""

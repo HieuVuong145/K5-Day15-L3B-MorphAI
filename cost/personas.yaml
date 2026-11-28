@@ -39,5 +39,5 @@ prices:             # USD / 1 triệu token — chép từ de-bai/further-readin
     source: "https://developers.openai.com/api/docs/pricing (de-bai/further-reading/model-prices.md, xem 25/11/2026)"
 
 usd_to_vnd:
-  rate:
-  source:
+  rate: 26030
+  source: "Vietcombank bán USD 26.030 VND/USD lúc 09:45 ngày 2026-11-28; bảng tỷ giá chính thức: https://www.vietcombank.com.vn/vi-VN/KHCN/Cong-cu-Tien-ich/Ty-gia; snapshot ngày 2026-11-28: https://ndh.vn/ty-gia-vietcombank/"
