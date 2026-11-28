@@ -9,7 +9,7 @@
 | Lượt | Run ID | Đạt / tổng | % | thuong | kho | tu_choi | So với chuẩn "đạt" |
 |---|---|---|---|---|---|---|---|
 | 1 | `run-1@20261127-235116` | 6/30 | 20% | 0/8 | 3/17 | 3/5 | chưa |
-| 2 | | __/__ | | __/__ | __/__ | __/__ | đạt / chưa |
+| 2 | `run-2@20261128-081300` | 22/30 | 73% | 8/8 | 12/17 | 2/5 | chưa |
 
 Kết quả từng câu: `eval/run-1.csv`, `eval/run-2.csv`. Trace: `traces/run-1.jsonl`, `traces/run-2.jsonl`.
 
@@ -17,26 +17,35 @@ Kết quả từng câu: `eval/run-1.csv`, `eval/run-2.csv`. Trace: `traces/run-
 
 | Nhóm lỗi | Số câu | Câu |
 |---|---|---|
-| vd: bịa nguồn *(ví dụ)* | | |
-| vd: đoán khi thiếu thông tin *(ví dụ)* | | |
-| | | |
+| Hỏi ngược tên khu vui chơi (không mặc định Khu vui chơi Mẫu) | 20 | `K02`, `K03`, `K04`, `K05`, `K06`, `K09`, `K10`, `K11`, `K12`, `K13`, `K14`, `K17`, `K18`, `K19`, `K20`, `K21`, `K22`, `K23`, `K29`, `K30` |
+| AI tự tính giờ sai dẫn đến vi phạm giờ đóng cửa / thời gian di chuyển | 1 | `K01` |
+| Phân loại nhầm câu hỏi mơ hồ thành ngoài phạm vi | 2 | `K26`, `K28` |
+| Nhận nhầm tên điểm trong khu thành khu vui chơi khác | 1 | `K24` |
 
-**≥3 lỗi cụ thể:**
+**≥3 lỗi cụ thể (từ `eval/run-1.csv`):**
 
 | Câu | Input | Output | Vì sao sai |
 |---|---|---|---|
-| | | | |
-| | | | |
-| | | | |
+| `K01` | "Gia đình 2 người lớn + 1 bé 5 tuổi cao 110cm, đi Khu vui chơi Mẫu ngày 29/11, từ 9h đến 17h, ngân sách 4 triệu, bé thích động vật và trò nước" | "Không thể đưa lịch này như một phương án hợp lệ. Ràng buộc chưa đạt: P10 mở cửa 09:00–15:00, không khớp giờ xếp 15:30–16:15..." | Model tự chọn giờ cho từng điểm và sai giờ đóng cửa `P10` (15:00) + thiếu đệm di chuyển `P06 -> P10` (chỉ chừa 10 phút thay vì 15 phút), sửa 1 vòng vẫn không hết lỗi. |
+| `K02` | "Nhà mình 2 người lớn, 1 bé 5 tuổi cao 110cm, đi ngày 01/12 (thứ Ba) từ 9h đến 17h, ngân sách 3,5 triệu, cả nhà thích xem show" | "Vui lòng cung cấp khu vui chơi. Chưa tra cứu hoặc lập lịch; vui lòng bổ sung rồi gửi lại." | Người dùng không gõ chữ "Khu vui chơi Mẫu" nên hệ thống dừng hỏi lại thay vì mặc định khu duy nhất của bản demo; kéo theo 20/30 câu trượt ngay ở bước tách input. |
+| `K05` | "Gia đình 2 người lớn, bé 5 tuổi cao 110cm, đi ngày 28/11 từ 9h đến 18h, ngân sách 4 triệu..." | "Vui lòng cung cấp khu vui chơi. Mỗi thành viên cần có tuổi 0–100 và chiều cao_cm 50–220... Giá trị đã hiểu: thành viên 1: tuổi 30, chiều cao 0 cm..." | Ngoài thiếu tên khu, người lớn không ghi chiều cao bị tách thành `0 cm` rồi bị validator chặn vì `< 50 cm`. |
+| `K26` | "tìm nơi nào phù hợp với chi phí trong ngân sách" | "Bản demo chỉ hỗ trợ lập lịch một ngày trong Khu vui chơi Mẫu; mình không thể hỗ trợ yêu cầu này." | Bị phân loại nhầm là `ngoai_pham_vi` và từ chối luôn thay vì hỏi lại ngân sách bằng số và các mục bắt buộc còn thiếu. |
 
 ## 3. Một lần cải tiến
 
-- Nhắm vào nhóm lỗi: __ — vì sao là nhóm **đau nhất với người dùng**: __
-- Đã sửa gì (có thể vài thay đổi cùng nhắm nhóm lỗi đó): __
-- Kết quả: nhóm lỗi đó __/__ → __/__ · tổng __% → __%
-- Câu nào **tệ đi** sau khi sửa: __
+- Nhắm vào nhóm lỗi: **Hỏi ngược tên khu/người lớn & AI tự xếp giờ sai (`code xếp giờ`)** — vì sao là nhóm **đau nhất với người dùng**: 20/30 câu ở lượt 1 bị chặn ngay trước khi xếp lịch dù người dùng đã nhập đủ ngày/giờ/ngân sách; còn khi vào được bước xếp lịch (`K01`) thì AI tự bịa giờ nên trượt `kiem_lich_trinh`.
+- Đã sửa gì (trong `codebase/agent.py`):
+  - Dùng **code xếp giờ** (`_build_schedule_by_code` / ghép khung giờ dựa trên ma trận di chuyển + đệm, giờ mở cửa, giờ show và tránh khung mưa) thay vì để model tự chọn giờ; model chỉ trích xuất ý và viết lý do/chọn ưu tiên.
+  - Mặc định `khu = "Khu vui chơi Mẫu"` (và nêu rõ trong output) khi người dùng không nêu tên khu khác; mặc định người lớn 18–59 tuổi đủ chiều cao khi không nêu tuổi/chiều cao; cải thiện tách intent để câu thiếu thông tin (`K26`, `K28`) quay lại hỏi đúng mục thiếu.
+- Kết quả: nhóm lỗi hỏi ngược khu & sai giờ `21/21` → `1/21` (chỉ còn `K24` nhầm tên quán thành khu khác; riêng `K01`–`K05`, `K12`, `K17`–`K22`, `K29`, `K30` đều qua `lich_hop_le`) · tổng `20%` (6/30) → `73%` (22/30) · `thuong`: `0/8` → `8/8` (100%).
+- Câu nào **tệ đi** sau khi sửa: `K16` (lượt 1 hỏi lại mục thiếu và trùng hợp đạt `tu_choi_dung`; lượt 2 nhận đúng là khu ngoài data nhưng câu từ chối thiếu từ khóa phạm vi theo bộ chấm tự động) và `K13`, `K14` (lượt 2 vẫn tạo lịch hợp lệ cho các điểm còn lại thay vì chỉ từ chối không trả lịch như `metric_spec.yaml` quy định cho `tu_choi`).
 
 ## 4. Còn lại
 
-- Lỗi chưa sửa + nguy hiểm thế nào: __
-- Nếu có thêm 1 tuần: __
+- Lỗi chưa sửa + nguy hiểm thế nào:
+  - `K06` (kho): thiếu thông tin nhóm đi nên hỏi lại trước khi kiểm ngân sách/giờ đóng cửa, chưa báo sớm khu đóng 20:00 và 500k không đủ.
+  - `K11` (kho): không có show pháo hoa trong data nhưng vẫn trả lịch ngày thường mà không báo rõ không có show pháo hoa (dễ làm khách hiểu nhầm là có).
+  - `K10`, `K23` (kho): có giải thích không đáp ứng được sở thích (`cam_giac_manh` do mưa, `nuoc` do đóng cửa 15:00) nhưng vẫn trả lịch các điểm khác, và `K23` nhắc giờ mở cửa `09:00` chưa có trong trace tool.
+  - `K13`, `K14` (tu_choi): chặn được yêu cầu sai (`P17`, `1.000.000đ`) nhưng vẫn trả kèm JSON `lich` nên trượt `khong_bia_lich` theo `metric_spec.yaml`.
+  - `K24` (kho): vẫn nhầm tên quán `P28` thành tên khu vui chơi khác thay vì tra trong Khu vui chơi Mẫu để báo `nguon_qua_cu`.
+- Nếu có thêm 1 tuần: tách rõ 2 chế độ cho `tu_choi` (hoặc cập nhật flow chỉ trả lời từ chối không kèm lịch), kiểm tra điểm/show đặc biệt được nhắc tên (`P28`, "show pháo hoa") trước khi lọc khu, và nhắc sớm giờ đóng cửa nếu khung giờ vượt 20:00.

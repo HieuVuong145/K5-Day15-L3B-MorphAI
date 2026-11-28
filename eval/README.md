@@ -13,7 +13,7 @@ Dữ liệu chạy thử là bộ catalog `synthetic` của **Khu vui chơi Mẫ
 - `eval/benchmark.csv`: **30 câu** (`thuong` 8 · `kho` 17 · `tu_choi` 5, gồm 2 câu tấn công `K13`, `K14`).
 - Nguồn: `nguoi_dung` 11 · `data_that` 0 · `tu_viet` 19 · `sinh_seed` 0 → từ người dùng / data thật **11/30** (36,7%, đạt ngưỡng ≥ 1/3).
 - Độ phủ — lưới input 5 chiều: nhóm đi (gia đình có trẻ 3–5 tuổi, nhóm bạn, người lớn tuổi) · ngân sách (dư, sát, không đủ 500k–2tr) · khung giờ (cả ngày, chiều tối, quá giờ đóng cửa) · thời tiết (nắng, mưa chiều, mưa cả ngày, chưa có dự báo) · thông tin & tính khả thi (đủ, thiếu, ngoài phạm vi).
-- Câu `kho` trỏ về 4 lớp chỗ khó (`spec.md` §5): lớp 1 (nguồn sự thật): `K11`, `K12` · lớp 2 (mơ hồ/thiếu tin): `K07`, `K08` · lớp 3 (ngoài phạm vi): `K15`, `K16` · lớp 4 (đặc thù lĩnh vực): `K05`, `K06`, `K09`, `K10` (+ tấn công `K13`, `K14`).
+- Câu `kho` trỏ về 4 lớp chỗ khó (`spec.md` §5): lớp 1 (nguồn sự thật): `K11`, `K12`, `K24` · lớp 2 (mơ hồ/thiếu tin): `K07`, `K08`, `K17`, `K25`, `K26`, `K28` · lớp 3 (ngoài phạm vi): `K15`, `K16`, `K27` · lớp 4 (đặc thù lĩnh vực): `K05`, `K06`, `K09`, `K10`, `K19`, `K22`, `K23`, `K29` (+ tấn công `K13`, `K14`).
 
 ## 3. Metric và cách chấm
 
@@ -39,10 +39,10 @@ Dữ liệu chạy thử là bộ catalog `synthetic` của **Khu vui chơi Mẫ
 | Lượt | Run ID | Model | Cấu hình (prompt / công cụ / thay đổi) | Đạt / tổng | % | Đạt chuẩn? |
 |---|---|---|---|---|---|---|
 | 1 | `run-1@20261127-235116` | `gpt-4o-mini` | Bản nối model đầu (bắt buộc nêu tên khu; sửa tối đa 1 vòng) | 6/30 | 20% | Chưa (`thuong` 0/8 · `kho` 3/17 · `tu_choi` 3/5) |
-| 2 | | | | __/__ | | |
+| 2 | `run-2@20261128-081300` | `gpt-4o-mini` | Code xếp giờ + mặc định Khu vui chơi Mẫu và thông tin người lớn | 22/30 | 73% | Chưa (`thuong` 8/8 · `kho` 12/17 · `tu_choi` 2/5) |
 
 Lượt chạy lại vì lỗi kỹ thuật, lượt sau CP4: ghi thêm dòng, không sửa dòng cũ.
 
 ## 6. Lỗi chính
 
-Tóm 2–3 dòng từ `eval/report.md`: nhóm lỗi lớn nhất · đã sửa gì · còn lại gì.
+Nhóm lỗi lớn nhất ở lượt 1 là hỏi ngược tên khu vui chơi (20/30 câu) và model tự tính giờ sai (`K01`). Sau khi chuyển sang **code xếp giờ** và mặc định Khu vui chơi Mẫu/người lớn ở lượt 2, tỉ lệ đạt tăng từ 20% lên 73% (`thuong` đạt 8/8); còn lại 8 câu trượt chủ yếu ở xử lý tên điểm/show không có trong data (`K11`, `K24`), không trả lịch khi câu `tu_choi` kèm yêu cầu hợp lệ (`K13`, `K14`), giải thích phạm vi `K16` và thiếu gợi ý nới sớm ở `K06`.
