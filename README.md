@@ -36,7 +36,7 @@ Prototype lập lịch dựa trên nhóm đi, khung giờ, ngân sách và sở 
 
 ## Cách nhập yêu cầu
 
-Gửi đủ thông tin trong cùng một tin nhắn; có thể viết thành nhiều câu. Agent cần tên khu, ngày đi, ngân sách, khung giờ, tuổi và chiều cao của từng người. Sở thích là tùy chọn. Nếu thiếu thông tin, agent sẽ hỏi lại; agent hiện không nhớ dữ liệu giữa các tin nhắn, vì vậy hãy gửi lại đủ yêu cầu khi bổ sung.
+Gửi đủ thông tin trong cùng một tin nhắn; có thể viết thành nhiều câu. Agent cần ngày đi, ngân sách, khung giờ, tuổi và chiều cao của từng trẻ em. Không nêu khu thì agent xếp ở Khu vui chơi Mẫu; người lớn không nêu tuổi/chiều cao thì tính là người lớn 18–59 tuổi (cả hai giả định luôn in ra trong câu trả lời). Sở thích là tùy chọn. Nếu thiếu thông tin, agent sẽ hỏi lại; agent hiện không nhớ dữ liệu giữa các tin nhắn, vì vậy hãy gửi lại đủ yêu cầu khi bổ sung.
 
 Ví dụ:
 
@@ -46,8 +46,14 @@ Agent trả lời cho người dùng và kèm JSON `lich` đọc được bằng
 
 ## Giới hạn bản demo
 
-- Chỉ có catalog synthetic cho **Khu vui chơi Mẫu**. Phải nêu tên khu; agent không tự mặc định khu khi thiếu thông tin và từ chối khu ngoài dữ liệu.
+- Chỉ có catalog synthetic cho **Khu vui chơi Mẫu**. Không nêu khu thì mặc định khu này; nêu khu khác ngoài dữ liệu thì agent từ chối.
 - Dữ liệu không được xác nhận bởi khu vui chơi thật. Không dùng để thay thế thông tin chính thức.
 - Agent không đặt vé, thanh toán, đọc ảnh hoặc lưu trạng thái hội thoại nhiều lượt.
+
+## Dùng AI vào việc gì
+
+- **Build:** Claude Code hỗ trợ viết code bản chạy thử (`codebase/agent.py`, test), script đếm khảo sát, nháp câu thử K18–K30, nháp văn bản và slide. Người phụ trách từng phần kiểm lại: chạy test, đếm lại trên đủ 26 phản hồi, tính lại đáp án câu thử bằng công cụ.
+- **Trong sản phẩm:** `gpt-4o-mini` tách câu chữ thành yêu cầu có cấu trúc và chọn hoạt động + thứ tự; giờ, tiền và mọi ràng buộc do code tính và kiểm.
+- **Không dùng AI để** tạo người được phỏng vấn, trích dẫn, câu trả lời khảo sát, hay sửa kết quả các lượt đã chạy. Chi tiết từng người: [docs/ai-usage.md](docs/ai-usage.md).
 
 Tài liệu và rubric Hackathon: [de-bai/README.md](de-bai/README.md).
