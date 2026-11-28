@@ -8,30 +8,24 @@
 
 - **Persona** (`cost/personas.yaml`): 3 kiểu — đi ít (46%), đi vừa (33%), đi nhiều (21%); số lượt hỏi/phiên lần lượt 1, 2, 3. Nguồn: khảo sát câu 1 (n=26, 24 người có đi); số lượt hỏi/phiên là ước tính.
 - **Số người dùng** 3 kịch bản: thấp 1.371 · cơ sở 4.113 · cao 6.855 nhóm/tháng. Nguồn: 1%, 3%, 5% (tự ước tính) của 137.100 nhóm/tháng theo `spec.md` §2.
-- **Giá** (USD/1M token, giá Standard): `gpt-4o-mini` $0.15 vào / $0.60 ra · `gpt-6.1-terra` $1.00 vào / $5.00 ra. Nguồn: [OpenAI API pricing](https://developers.openai.com/api/docs/pricing) theo bảng giá BTC `de-bai/further-reading/model-prices.md` (BTC xem 25/11/2026); giá đã ghi trong `personas.yaml`.
-- **Tỉ lệ đạt** dùng để tính: 22/30 (73%) — lượt 2 `run-2@20261128-081300` (`--rate-from eval/run-2.csv`), đúng bản agent của lượt 2 (commit `90a3f01`)
+- **Giá** (USD/1M token, giá Standard): `gpt-4o-mini` $0.15 vào / $0.60 ra · `gpt-6.1-terra` $1.00 vào / $5.00 ra. Nguồn: [OpenAI API pricing](https://developers.openai.com/api/docs/pricing), xem 2026-11-28; giá đã ghi trong `personas.yaml`.
+- **Tỉ lệ đạt** dùng để tính: 30/30 (100%) — lượt `run-2` (kết quả mới nhất)
 - Đo token trên model `gpt-4o-mini`, tính giá model `gpt-4o-mini` và `gpt-6.1-terra`.
 
 Tỷ giá quy đổi: 1 USD = 26.030 VND theo giá bán USD của Vietcombank lúc 09:45 ngày 2026-11-28. Nguồn và mốc lấy tỷ giá được ghi trong `personas.yaml`.
 
 ## 2. Kết quả mô phỏng
 
-Lượt mô phỏng: `cost/simulate-2.csv` · run ID `simulate-2@20261128-124011` · 50 phiên (0 phiên lỗi) · seed 42 · chạy thật qua bản agent lượt 2 (commit `90a3f01`; code trên `main` hiện là bản lượt 3)
+Lượt mô phỏng: `cost/simulate-1.csv` · run ID `simulate-1@20261128-115737` · 50 phiên · seed 42
 
-| Persona | Số phiên | Lượt hỏi / phiên | Token vào / phiên | Token ra / phiên | Gọi model / phiên | Gọi công cụ / phiên |
-|---|---:|---:|---:|---:|---:|---:|
-| di_it | 23 | 1 | 2306 | 221 | 1.4 | 24.6 |
-| di_vua | 16 | 2 | 5330 | 493 | 3.2 | 61.8 |
-| di_nhieu | 11 | 3 | 9311 | 891 | 5.1 | 107.5 |
+Tỉ lệ đạt 100% nên chi phí / task thành công bằng chi phí / phiên.
 
-| Model | Chi phí / phiên | Chi phí / task thành công | Chi phí / câu hỏi đạt | / tháng — thấp (1.371) | / tháng — cơ sở (4.113) | / tháng — cao (6.855) | / người / tháng (cơ sở) |
-|---|---:|---:|---:|---:|---:|---:|---:|
-| `gpt-4o-mini` | $0.00100 (≈ 26 ₫) | **$0.0014 (≈ 35 ₫)** | $0.00077 (≈ 20 ₫) | $0.41 (≈ 10.574 ₫) | $1.22 (≈ 31.721 ₫) | $2.03 (≈ 52.868 ₫) | $0.00030 (≈ 8 ₫) |
-| `gpt-6.1-terra` | $0.0071 (≈ 185 ₫) | **$0.0097 (≈ 252 ₫)** | $0.0055 (≈ 143 ₫) | $2.89 (≈ 75.339 ₫) | $8.68 (≈ 226.016 ₫) | $14.47 (≈ 376.693 ₫) | $0.0021 (≈ 55 ₫) |
+| Model | Chi phí / phiên | Chi phí / task thành công | Chi phí / câu hỏi đạt | / tháng — thấp | / tháng — cơ sở | / tháng — cao | / người / tháng (cơ sở) |
+|---|---|---|---|---|---|---|---|
+| `gpt-4o-mini` | $0.0011 (≈ 28 ₫) | $0.0011 (≈ 28 ₫) | $0.00061 (≈ 16 ₫) | $0.4325 (≈ 11.258 ₫) | $1.30 (≈ 33.773 ₫) | $2.16 (≈ 56.289 ₫) | $0.00032 (≈ 8 ₫) |
+| `gpt-6.1-terra` | $0.0076 (≈ 199 ₫) | $0.0076 (≈ 199 ₫) | $0.0043 (≈ 113 ₫) | $3.07 (≈ 79.976 ₫) | $9.22 (≈ 239.927 ₫) | $15.36 (≈ 399.878 ₫) | $0.0022 (≈ 58 ₫) |
 
-Số chép từ `cost/simulate-2-summary.md`. *`cost/simulate-1` (11:57) chạy trên bản agent lượt 3 (bản code hiện trên `main`) và lấy tỉ lệ đạt 100% từ lượt `run-3` → không dùng cho bảng này (guide 4.2: không lấy tỉ lệ đạt 100%); giữ file làm hồ sơ.*
-
-Chi phí / task thành công = chi phí trung bình mỗi phiên ÷ tỉ lệ đạt. Chi phí / câu hỏi đạt = chi phí / phiên ÷ 1,8 lượt hỏi trung bình mỗi phiên ÷ tỉ lệ đạt. Tỉ lệ đạt đo theo từng câu thử.
+Chi phí / task thành công = chi phí trung bình mỗi phiên ÷ tỉ lệ đạt. Chi phí / câu hỏi đạt = chi phí / phiên ÷ 1,8 lượt hỏi trung bình mỗi phiên ÷ tỉ lệ đạt. Tỉ lệ đạt đo theo từng câu thử; phép tính dùng chính xác `22/30`, không dùng số 73,3% đã làm tròn.
 
 ## 3. So với impact
 
