@@ -289,8 +289,21 @@ class _Planner:
     def need(self, zone_a, zone_b) -> int:
         if zone_a == zone_b:
             return 0
-        estimate = self.travel.get(zone_a, {}).get(zone_b) or {}
-        return estimate.get("minutes", 0) + estimate.get("buffer_min", 0)
+        estimate = self.travel.get(zone_a, {}).get(zone_b)
+        if (
+            not isinstance(estimate, dict)
+            or not isinstance(estimate.get("minutes"), int)
+            or isinstance(estimate.get("minutes"), bool)
+            or not isinstance(estimate.get("buffer_min"), int)
+            or isinstance(estimate.get("buffer_min"), bool)
+            or estimate["minutes"] < 0
+            or estimate["buffer_min"] < 0
+        ):
+            raise ValueError(
+                "Thiếu hoặc sai ước lượng thời gian di chuyển giữa %s và %s."
+                % (zone_a, zone_b)
+            )
+        return estimate["minutes"] + estimate["buffer_min"]
 
     def _outdoor(self, meta) -> bool:
         if self._is_show(meta):
