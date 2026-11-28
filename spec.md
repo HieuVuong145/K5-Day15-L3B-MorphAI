@@ -138,13 +138,13 @@ Data BTC cấp đã dùng (nếu có — không commit nguyên file): không dù
 ## §7. Đánh giá & chuẩn "đạt" *(guide 2.4, 4.1)*
 - Data card: `data/DATA_CARD.md` · bộ câu thử: `eval/benchmark.csv` — 30 câu (thuong 8 · kho 17 · tu_choi 5, gồm 2 câu tấn công K13, K14; 11/30 câu từ lời người dùng) · metric: `eval/metric_spec.yaml` (6 metric)
 - **Chuẩn "đạt"** (chốt **trước 19:30 Thứ Sáu 27/11**, giữ nguyên đến 23:59 Thứ Bảy 28/11): "Đạt khi ≥ 75% câu qua toàn bộ `pass_criterion`, **và** `lich_hop_le`, `so_lieu_khop_cong_cu`, `khong_bia_lich`, `tu_choi_dung` đều đạt 100%, **và** `hoi_lai_dung_luc`, `dung_so_thich` ≥ 80%."
-- Kết quả: lượt 1 6/30 (20%) · lượt 2 22/30 (73%) — run ID: `run-1@20261127-235116` / `run-2@20261128-081300` → chi tiết `eval/report.md`, hồ sơ `eval/README.md`
+- Kết quả: lượt 1 6/30 (20%) · lượt 2 22/30 (73%) *(lượt 3 thử nghiệm 30/30 trên bản code hiện tại của `main`, không dùng chấm — xem `eval/report.md`)* — run ID: `run-1@20261127-235116` / `run-2@20261128-081300` → chi tiết `eval/report.md`, hồ sơ `eval/README.md`
 
 ## §8. Chi phí khi dùng thật *(guide 4.2)*
-- Persona + giá: `cost/personas.yaml` · lượt mô phỏng: `cost/simulate-__.csv` (__ phiên)
-- Chi phí / task thành công: __ (model __) · __ (model __)
-- Chi phí / tháng ở quy mô thật: thấp __ · cơ sở __ · cao __ → chi tiết `cost/cost-estimate.md`
-- So với impact / người / tháng (§2): đáng làm không, vì sao:
+- Persona + giá: `cost/personas.yaml` (3 persona theo khảo sát câu 1; giá `gpt-4o-mini`, `gpt-6.1-terra`; tỉ giá Vietcombank 26.030 ₫/USD) · lượt mô phỏng: `cost/simulate-2.csv` (50 phiên, 0 lỗi, seed 42)
+- Chi phí / task thành công (tỉ lệ đạt lượt 2 = 73%): **$0.0014 ≈ 35 ₫ (`gpt-4o-mini`)** · $0.0097 ≈ 252 ₫ (`gpt-6.1-terra`) — token đo trên `gpt-4o-mini`
+- Chi phí / tháng ở quy mô thật (1.371 · 4.113 · 6.855 nhóm = 1% · 3% · 5% của 137.100 nhóm/tháng, tỉ lệ dùng *(tự ước tính)*): `gpt-4o-mini` thấp $0.41 · cơ sở $1.22 · cao $2.03 / tháng; `gpt-6.1-terra` $2.89 · $8.68 · $14.47 → chi tiết `cost/cost-estimate.md`
+- So với impact / người / tháng (§2): mỗi nhóm tiết kiệm khoảng 1–6 phút / tháng (0,1–0,3 chuyến × 65,4% × 15–30 phút) trong khi chi phí model ≈ 8 ₫ / nhóm / tháng → chi phí model không phải rào cản. Rào cản thật là chất lượng (73%, chưa đạt chuẩn ≥75%) và dữ liệu thật của khu vui chơi (catalog hiện synthetic); chưa tính hosting và giờ công kiểm dữ liệu.
 
 ## §9. Rủi ro & an toàn
 - **Dữ liệu:** khảo sát (`evidence/survey/responses.csv`, n = 26) đã bỏ tên, email; phỏng vấn ghi `P1–P6` + vai, không ghi tên, SĐT, không ghi âm. Không thu dữ liệu cá nhân của người dùng sản phẩm ngoài tuổi, chiều cao từng người trong tin nhắn (không lưu giữa các lượt). Không dùng data BTC; catalog, show, vé, thời tiết, di chuyển đều `synthetic` (`data/DATA_CARD.md`). Model gọi qua API trả phí (`gpt-4o-mini`), key chỉ ở `.env` (không commit). Chỉ gửi cho model nội dung tin nhắn chuyến đi và catalog synthetic.
@@ -179,6 +179,9 @@ Data BTC cấp đã dùng (nếu có — không commit nguyên file): không dù
 | 28/11 01:35 | **Cải tiến trước lượt 2:** AI chỉ chọn điểm + thứ tự, code xếp giờ (giờ show, giờ mở, đi lại + đệm, mưa); mặc định Khu vui chơi Mẫu và người lớn (in rõ trong output); câu mơ hồ hỏi lại thay vì từ chối; nêu lý do không xếp | Lượt 1: `thuong` 0/8 vì model tự điền giờ lệch (vd `K01`: S01 xếp 11:00 thay vì 10:30); 26/30 câu dừng ở bước hỏi lại tên khu / chiều cao người lớn; `K26`, `K28` bị từ chối nhầm |
 | 28/11 08:16 | Chạy lượt 2 `run-2.csv` trên cùng 30 câu | Guide 4.1 |
 | 28/11 09:20 | Người thứ hai (Thanh) chấm độc lập 5 output `run-1` → khớp 5/5 | Guide 2.4 bước 4 |
+| 28/11 11:11 | Chấm lượt 2: 22/30 (73%); viết `eval/report.md`, `eval/README.md` | Guide 4.1 |
+| 28/11 11:39–12:29 | Thử bản agent sửa tiếp theo các câu trượt lượt 2 (lượt `run-3`, 30/30) và `simulate-1`; bản này đã ghi đè `run-2` trên `main` (PR #15) | — |
+| 28/11 12:40 | **Khôi phục kết quả PR #15 ghi đè:** trả `run-2` (22/30) và trace về đúng bản trước; lưu lượt 11:39 đúng tên `run-3` làm hồ sơ; chạy `simulate-2` trên bản agent lượt 2 (commit `90a3f01`) với tỉ lệ đạt lượt 2 (73%). Code (`agent.py`, `auto_grade.py`, test) giữ bản mới của PR #15 | Luật chung mục 3: không sửa kết quả lượt đã chạy, chạy thêm thì ghi lượt mới · guide 4.2: không lấy tỉ lệ đạt 100%. Số báo cáo dùng lượt 2 + `simulate-2` |
 
 **Sau CP4 (đến 23:59 Thứ Bảy 28/11)** (sửa theo góp ý — không sửa chuẩn "đạt", câu thử, số bằng chứng, kết quả các lượt đã chạy)
 

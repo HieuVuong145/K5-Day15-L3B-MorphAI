@@ -39,10 +39,11 @@ Dữ liệu chạy thử là bộ catalog `synthetic` của **Khu vui chơi Mẫ
 | Lượt | Run ID | Model | Cấu hình (prompt / công cụ / thay đổi) | Đạt / tổng | % | Đạt chuẩn? |
 |---|---|---|---|---|---|---|
 | 1 | `run-1@20261127-235116` | `gpt-4o-mini` | Bản nối model đầu (bắt buộc nêu tên khu; sửa tối đa 1 vòng) | 6/30 | 20% | Chưa (`thuong` 0/8 · `kho` 3/17 · `tu_choi` 3/5) |
-| 2 | `run-2@20261128-113915` | `gpt-4o-mini` | Code xếp giờ + xử lý câu thiếu dữ liệu, show bắt buộc, từ chối, sở thích và điểm có nguồn cũ | 30/30 | 100% | Đạt (`thuong` 8/8 · `kho` 17/17 · `tu_choi` 5/5) |
+| 2 | `run-2@20261128-081300` | `gpt-4o-mini` | Code xếp giờ + mặc định Khu vui chơi Mẫu và thông tin người lớn | 22/30 | 73% | Chưa (`thuong` 8/8 · `kho` 12/17 · `tu_choi` 2/5) |
+| 3 | `run-3@20261128-113915` | `gpt-4o-mini` | *Thử nghiệm, không dùng chấm R5:* bản agent sửa tiếp theo đúng các câu trượt ở lượt 2 (PR #15, là bản code hiện trên `main`), chấm bằng bản `auto_grade.py` đã sửa cùng PR | 30/30 | 100% | — (bộ câu thử đã nhìn khi sửa; chưa có phần giữ riêng) |
 
-Theo giới hạn tối đa hai lượt, kết quả mới nhất được chọn làm lượt 2 thay cho lượt 2 cũ; dữ liệu câu trả lời và chấm điểm không đổi, chỉ đồng bộ tên tệp và Run ID.
+Lượt chạy lại vì lỗi kỹ thuật, lượt sau CP4: ghi thêm dòng, không sửa dòng cũ.
 
 ## 6. Lỗi chính
 
-Nhóm lỗi lớn nhất ở lượt 1 là hỏi ngược tên khu vui chơi (20/30 câu) và model tự tính giờ sai (`K01`). Lượt 2 dùng **code xếp giờ**, mặc định Khu vui chơi Mẫu/người lớn, và xử lý các lỗi còn lại về dữ liệu thiếu, show bắt buộc, từ chối, sở thích và điểm có nguồn cũ. Kết quả đạt 30/30 (100%). Auto-grader: 25 PASS, 0 FAIL; 5 câu `hoi_lai` được chấm tay PASS.
+Nhóm lỗi lớn nhất ở lượt 1 là hỏi ngược tên khu vui chơi (20/30 câu) và model tự tính giờ sai (`K01`). Sau khi chuyển sang **code xếp giờ** và mặc định Khu vui chơi Mẫu/người lớn ở lượt 2, tỉ lệ đạt tăng từ 20% lên 73% (`thuong` đạt 8/8); còn lại 8 câu trượt chủ yếu ở xử lý tên điểm/show không có trong data (`K11`, `K24`), không trả lịch khi câu `tu_choi` kèm yêu cầu hợp lệ (`K13`, `K14`), giải thích phạm vi `K16` và thiếu gợi ý nới sớm ở `K06`.
