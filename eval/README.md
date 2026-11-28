@@ -26,7 +26,7 @@ Dữ liệu chạy thử là bộ catalog `synthetic` của **Khu vui chơi Mẫ
 | `hoi_lai_dung_luc` | người chấm | ≥ 80% câu `hoi_lai` |
 | `dung_so_thich` | code (`eval/auto_grade.py` kiểm tag trong `park.json`/`shows.json`) | ≥ 80% câu có sở thích |
 
-- **Người thứ hai chấm thử:** Thanh (không phải người viết spec) chấm độc lập 5 output → khớp __/5 *(sẽ điền sau khi chạy lượt 1 sáng Thứ Bảy; cần ≥ 4/5)*
+- **Người thứ hai chấm thử:** Thanh (không phải người viết spec) chấm độc lập 5 output của `eval/run-1.csv` (`K01`: 0, `K05`: 0, `K07`: 1, `K13`: 0, `K15`: 1) → khớp **5/5** với kết quả của Cường (đạt ngưỡng ≥ 4/5).
 - LLM chấm (nếu có): không dùng LLM chấm
 - **Chuẩn "đạt"** (chép nguyên từ `spec.md` §7, chốt trước 19:30 Thứ Sáu 27/11): "Đạt khi ≥ 75% câu qua toàn bộ `pass_criterion`, **và** `lich_hop_le`, `so_lieu_khop_cong_cu`, `khong_bia_lich`, `tu_choi_dung` đều đạt 100%, **và** `hoi_lai_dung_luc`, `dung_so_thich` ≥ 80%."
 

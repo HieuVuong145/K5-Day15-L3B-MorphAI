@@ -1,15 +1,15 @@
 # Mô phỏng chi phí khi dùng thật — Track C1: Lịch trình một ngày ở khu vui chơi
-# Bản nháp CP3 (Người 3 — Thanh), bám khảo sát câu 1 (evidence/survey/responses.csv, n = 26)
-# và bảng giá BTC (de-bai/further-reading/model-prices.md, xem 25/11/2026).
+# Bản CP4 (Người 3 — Thanh), bám khảo sát câu 1 (evidence/survey/responses.csv, n = 26),
+# số lượt khách công bố ở spec.md §2, và bảng giá BTC (de-bai/further-reading/model-prices.md, xem 25/11/2026).
 
 sessions: 50        # số phiên mô phỏng — bản nộp CP4 ≥50
 seed: 42            # giữ cố định để chạy lại ra cùng chuỗi phiên
 
-users:              # số nhóm khách dùng thử sản phẩm mỗi tháng ở 3 kịch bản (1 khu vui chơi lớn)
-  low: 500
-  base: 2000
-  high: 5000
-  source: "(tự ước tính — bản nháp CP3, chờ ghép số lượt khách công bố công khai ở spec.md §2)"
+users:              # số nhóm khách dùng sản phẩm mỗi tháng ở 3 kịch bản (1 khu vui chơi cỡ Suối Tiên ≈ 137.100 nhóm/tháng)
+  low: 1371         # 1% × 137.100 (tự ước tính)
+  base: 4113        # 3% × 137.100 (tự ước tính)
+  high: 6855        # 5% × 137.100 (tự ước tính)
+  source: "spec.md §2: ≈137.100 nhóm khách/tháng (5.000.000 lượt/năm ÷ 12 ÷ 3,04 người/nhóm, nguồn VnEconomy 11/08/2025); tỉ lệ dùng thử thấp 1% · cơ sở 3% · cao 5% (tự ước tính)"
 
 personas:           # phân theo khảo sát câu 1 (n = 26, bỏ 2 người 0 lần/năm → 24 người có đi)
   - name: di_it
@@ -29,14 +29,14 @@ personas:           # phân theo khảo sát câu 1 (n = 26, bỏ 2 người 0 l
     source: "khảo sát câu 1 (n = 26): 5/24 người có đi chọn '4 lần trở lên'; uses_per_month & turns_per_session (tự ước tính)"
 
 prices:             # USD / 1 triệu token — chép từ de-bai/further-reading/model-prices.md (BTC kiểm 25/11/2026)
-  - model: gemini-3.1-flash-lite
-    input: 0.25
-    output: 1.50
-    source: "https://ai.google.dev/gemini-api/docs/pricing (de-bai/further-reading/model-prices.md, xem 25/11/2026)"
-  - model: gemini-4-hydrogen
-    input: 1.50
-    output: 7.50
-    source: "https://ai.google.dev/gemini-api/docs/pricing (de-bai/further-reading/model-prices.md, xem 25/11/2026)"
+  - model: gpt-4o-mini
+    input: 0.15
+    output: 0.60
+    source: "https://developers.openai.com/api/docs/pricing (de-bai/further-reading/model-prices.md, xem 25/11/2026)"
+  - model: gpt-6.1-terra
+    input: 1.00
+    output: 5.00
+    source: "https://developers.openai.com/api/docs/pricing (de-bai/further-reading/model-prices.md, xem 25/11/2026)"
 
 usd_to_vnd:
   rate:
