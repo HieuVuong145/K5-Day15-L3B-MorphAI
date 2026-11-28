@@ -176,31 +176,31 @@
 <section class="slide">
   <span class="num">6 / 8</span>
   <p class="kicker">Chi phí khi dùng thật</p>
-  <h1>Chi phí / task thành công: <span class="todo">$ — gpt-4o-mini</span></h1>
+  <h1>Chi phí / task thành công: $0.0014 ≈ 35 ₫ (gpt-4o-mini)</h1>
   <table style="margin-bottom:18px">
     <tr><th>Kịch bản (nhóm dùng / tháng)</th><th>gpt-4o-mini ($0,15 / $0,60 mỗi 1M token)</th><th>gpt-6.1-terra ($1,00 / $5,00)</th></tr>
-    <tr><td>Thấp · 1.371 (1%)</td><td><span class="todo">$ / tháng</span></td><td><span class="todo">$ / tháng</span></td></tr>
-    <tr><td>Cơ sở · 4.113 (3%)</td><td><span class="todo">$ / tháng</span></td><td><span class="todo">$ / tháng</span></td></tr>
-    <tr><td>Cao · 6.855 (5%)</td><td><span class="todo">$ / tháng</span></td><td><span class="todo">$ / tháng</span></td></tr>
+    <tr><td>Thấp · 1.371 (1%)</td><td>$0.41 / tháng (≈ 10.600 ₫)</td><td>$2.89 / tháng (≈ 75.300 ₫)</td></tr>
+    <tr class="chosen"><td>Cơ sở · 4.113 (3%)</td><td>$1.22 / tháng (≈ 31.700 ₫)</td><td>$8.68 / tháng (≈ 226.000 ₫)</td></tr>
+    <tr><td>Cao · 6.855 (5%)</td><td>$2.03 / tháng (≈ 52.900 ₫)</td><td>$14.47 / tháng (≈ 376.700 ₫)</td></tr>
   </table>
   <ul>
-    <li>Mô phỏng <span class="todo">≥50</span> phiên chạy thật qua bản chạy thử, persona theo khảo sát câu 1 (đi 1 lần · 2–3 lần · ≥4 lần / năm)</li>
-    <li><b>So với impact:</b> mỗi nhóm tiết kiệm 15–30 phút / chuyến (§2) ↔ chi phí <span class="todo">$ / nhóm / tháng</span></li>
+    <li>Mô phỏng <b>50 phiên</b> (0 lỗi) chạy thật qua bản chạy thử, persona theo khảo sát câu 1 (đi 1 lần · 2–3 lần · ≥4 lần / năm); chi phí / task = chi phí / phiên ÷ tỉ lệ đạt lượt 2 (73%) · gpt-6.1-terra: $0.0097 ≈ 252 ₫</li>
+    <li><b>So với impact:</b> mỗi nhóm tiết kiệm ~1–6 phút / tháng (15–30 phút / chuyến) ↔ chi phí model ≈ <b>8 ₫ / nhóm / tháng</b> → chi phí không phải rào cản; rào cản là chất lượng và dữ liệu thật</li>
   </ul>
-  <div class="src">cost/personas.yaml · cost/simulate-N.csv · cost/cost-estimate.md · giá: de-bai/further-reading/model-prices.md (BTC xem 25/11/2026) · số nhóm: spec.md §2 × tỉ lệ dùng (tự ước tính)</div>
+  <div class="src">cost/personas.yaml · cost/simulate-2.csv (simulate-2@20261128-124011) · cost/cost-estimate.md · tỉ giá Vietcombank 26.030 ₫/USD (28/11/2026) · giá: de-bai/further-reading/model-prices.md (BTC xem 25/11/2026) · số nhóm: spec.md §2 × tỉ lệ dùng (tự ước tính)</div>
 </section>
 
 <!-- 7. Kết luận -->
 <section class="slide">
   <span class="num">7 / 8</span>
   <p class="kicker">Kết luận</p>
-  <h1><span class="todo">Go / Iterate / Stop</span></h1>
+  <h1>Iterate — pain thật, chi phí rẻ, chất lượng chưa đạt chuẩn</h1>
   <div class="grid3">
     <div class="stat"><b>65,4%</b><span>lỡ ≥1 điểm định chơi — pain có thật (trang 1)</span></div>
     <div class="stat"><b>22/30</b><span>(73%) đạt ở lượt 2, từ 6/30 — chưa chạm chuẩn "đạt" ≥75% (trang 5)</span></div>
-    <div class="stat"><b><span class="todo">$</span></b><span>mỗi task thành công, gpt-4o-mini (trang 6)</span></div>
+    <div class="stat"><b>35 ₫</b><span>mỗi task thành công, gpt-4o-mini (trang 6)</span></div>
   </div>
-  <p style="margin-top:26px"><span class="todo">Một câu kết luận dẫn 3 số trên</span></p>
+  <p style="margin-top:26px">65,4% gia đình lỡ điểm định chơi và mỗi lịch đạt chỉ tốn ~35 ₫, nên đáng làm tiếp; nhưng 73% chưa chạm chuẩn "đạt" ≥75% và tu_choi chưa 100%, nên <b>iterate</b>: sửa câu từ chối, điểm/show được nhắc tên, rồi thay catalog synthetic bằng dữ liệu thật của một khu.</p>
   <div class="src">evidence/summary.md · eval/report.md · cost/cost-estimate.md</div>
 </section>
 

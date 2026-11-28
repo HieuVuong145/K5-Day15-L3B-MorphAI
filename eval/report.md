@@ -1,7 +1,7 @@
-# Báo cáo đánh giá — lượt 1 → lượt 2
+# Báo cáo đánh giá — lượt 1 → một cải tiến → lượt 2
 
-> Điền ở guide bước 4.1. Các lượt dùng cùng bộ câu thử và cách chấm. Chấm ở rubric R5.
-> Số lấy từ `python run.py score eval/run-N.csv` sau khi điền cột `pass`. **Kết quả thấp ghi thật vẫn đủ điểm.**
+> Điền ở guide bước 4.1. Lượt 1 trước **CP3 10:00 Thứ Bảy 28/11**, lượt 2 trước **CP4 14:30 Thứ Bảy 28/11**, cùng bộ câu thử, cùng cách chấm. Chấm ở rubric R5.
+> Số lấy từ `python run.py score eval/run-1.csv` (và `run-2.csv`) sau khi điền cột `pass`. **Kết quả thấp ghi thật vẫn đủ điểm.**
 > Không được: sửa chuẩn "đạt", bỏ câu thử trượt, sửa `expected` cho khớp output, sửa kết quả lượt đã chạy.
 
 ## 1. Kết quả
@@ -9,11 +9,12 @@
 | Lượt | Run ID | Đạt / tổng | % | thuong | kho | tu_choi | So với chuẩn "đạt" |
 |---|---|---|---|---|---|---|---|
 | 1 | `run-1@20261127-235116` | 6/30 | 20% | 0/8 | 3/17 | 3/5 | chưa |
-| 2 | `run-2@20261128-113915` | 30/30 | 100% | 8/8 | 17/17 | 5/5 | đạt |
+| 2 | `run-2@20261128-081300` | 22/30 | 73% | 8/8 | 12/17 | 2/5 | chưa |
+| *3 (thử nghiệm)* | `run-3@20261128-113915` | 30/30 | 100% | 8/8 | 17/17 | 5/5 | *không dùng chấm R5* |
+
+*Lượt 3 chạy lúc 11:39 trên bản agent sửa tiếp theo đúng các câu trượt ở lượt 2, chấm bằng bản `auto_grade.py` cũng đã sửa; bản code đó là bản hiện trên `main` (PR #15). Vì đã nhìn đúng các câu thử khi sửa nên 100% không phản ánh độ tổng quát; số dùng để báo cáo là lượt 1 → lượt 2. File: `eval/run-3.csv`, `traces/run-3.jsonl`.*
 
 Kết quả từng câu: `eval/run-1.csv`, `eval/run-2.csv`. Trace: `traces/run-1.jsonl`, `traces/run-2.jsonl`.
-
-Theo giới hạn tối đa hai lượt, kết quả tạo lúc `2026-11-28 11:39:15` (trước đây mang tên `run-3`) được chọn thay cho lượt 2 cũ. Nội dung câu trả lời và kết quả chấm không đổi; chỉ tên tệp và Run ID được đồng bộ thành `run-2`. Bản lượt 2 cũ được lưu ngoài thư mục đánh giá.
 
 ## 2. Lỗi lượt 1 — gom thành nhóm có tên
 
@@ -33,17 +34,21 @@ Theo giới hạn tối đa hai lượt, kết quả tạo lúc `2026-11-28 11:3
 | `K05` | "Gia đình 2 người lớn, bé 5 tuổi cao 110cm, đi ngày 28/11 từ 9h đến 18h, ngân sách 4 triệu..." | "Vui lòng cung cấp khu vui chơi. Mỗi thành viên cần có tuổi 0–100 và chiều cao_cm 50–220... Giá trị đã hiểu: thành viên 1: tuổi 30, chiều cao 0 cm..." | Ngoài thiếu tên khu, người lớn không ghi chiều cao bị tách thành `0 cm` rồi bị validator chặn vì `< 50 cm`. |
 | `K26` | "tìm nơi nào phù hợp với chi phí trong ngân sách" | "Bản demo chỉ hỗ trợ lập lịch một ngày trong Khu vui chơi Mẫu; mình không thể hỗ trợ yêu cầu này." | Bị phân loại nhầm là `ngoai_pham_vi` và từ chối luôn thay vì hỏi lại ngân sách bằng số và các mục bắt buộc còn thiếu. |
 
-## 3. Cải tiến ở lượt 2
+## 3. Một lần cải tiến
 
 - Nhắm vào nhóm lỗi: **Hỏi ngược tên khu/người lớn & AI tự xếp giờ sai (`code xếp giờ`)** — vì sao là nhóm **đau nhất với người dùng**: 20/30 câu ở lượt 1 bị chặn ngay trước khi xếp lịch dù người dùng đã nhập đủ ngày/giờ/ngân sách; còn khi vào được bước xếp lịch (`K01`) thì AI tự bịa giờ nên trượt `kiem_lich_trinh`.
 - Đã sửa gì (trong `codebase/agent.py`):
   - Dùng **code xếp giờ** (`_build_schedule_by_code` / ghép khung giờ dựa trên ma trận di chuyển + đệm, giờ mở cửa, giờ show và tránh khung mưa) thay vì để model tự chọn giờ; model chỉ trích xuất ý và viết lý do/chọn ưu tiên.
   - Mặc định `khu = "Khu vui chơi Mẫu"` (và nêu rõ trong output) khi người dùng không nêu tên khu khác; mặc định người lớn 18–59 tuổi đủ chiều cao khi không nêu tuổi/chiều cao; cải thiện tách intent để câu thiếu thông tin (`K26`, `K28`) quay lại hỏi đúng mục thiếu.
-- Các lỗi còn lại được xử lý: dữ liệu thiếu (`K06`, `K10`, `K11`), yêu cầu từ chối (`K13`, `K14`, `K16`), sở thích không khả thi (`K23`) và nhận diện đúng điểm đến (`K24`); đồng thời làm rõ điều kiện nhóm ở `K08`, ngân sách ở `K26` và các trường hợp cần hỏi lại.
-- Kết quả: `30/30` (100%), so với lượt 1 là `6/30` (20%); `thuong` 8/8, `kho` 17/17, `tu_choi` 5/5.
+- Kết quả: nhóm lỗi hỏi ngược khu & sai giờ `21/21` → `1/21` (chỉ còn `K24` nhầm tên quán thành khu khác; riêng `K01`–`K05`, `K12`, `K17`–`K22`, `K29`, `K30` đều qua `lich_hop_le`) · tổng `20%` (6/30) → `73%` (22/30) · `thuong`: `0/8` → `8/8` (100%).
+- Câu nào **tệ đi** sau khi sửa: `K16` (lượt 1 hỏi lại mục thiếu và trùng hợp đạt `tu_choi_dung`; lượt 2 nhận đúng là khu ngoài data nhưng câu từ chối thiếu từ khóa phạm vi theo bộ chấm tự động) và `K13`, `K14` (lượt 2 vẫn tạo lịch hợp lệ cho các điểm còn lại thay vì chỉ từ chối không trả lịch như `metric_spec.yaml` quy định cho `tu_choi`).
 
-## 4. Chấm tay và kết luận
+## 4. Còn lại
 
-- Auto-grader báo 25 PASS, 0 FAIL và 5 câu cần chấm tay.
-- Chấm tay `hoi_lai_dung_luc`: `K07`, `K08`, `K25`, `K26`, `K28` đều đạt (5/5, 100%). Với `K08`, yêu cầu tuổi/chiều cao của từng người được tính là đủ để làm rõ số lượng nhóm.
-- Kết luận lượt 2: `30/30` (100%), đạt ngưỡng tổng và các ngưỡng metric đã chốt trong `spec.md` §7.
+- Lỗi chưa sửa + nguy hiểm thế nào:
+  - `K06` (kho): thiếu thông tin nhóm đi nên hỏi lại trước khi kiểm ngân sách/giờ đóng cửa, chưa báo sớm khu đóng 20:00 và 500k không đủ.
+  - `K11` (kho): không có show pháo hoa trong data nhưng vẫn trả lịch ngày thường mà không báo rõ không có show pháo hoa (dễ làm khách hiểu nhầm là có).
+  - `K10`, `K23` (kho): có giải thích không đáp ứng được sở thích (`cam_giac_manh` do mưa, `nuoc` do đóng cửa 15:00) nhưng vẫn trả lịch các điểm khác, và `K23` nhắc giờ mở cửa `09:00` chưa có trong trace tool.
+  - `K13`, `K14` (tu_choi): chặn được yêu cầu sai (`P17`, `1.000.000đ`) nhưng vẫn trả kèm JSON `lich` nên trượt `khong_bia_lich` theo `metric_spec.yaml`.
+  - `K24` (kho): vẫn nhầm tên quán `P28` thành tên khu vui chơi khác thay vì tra trong Khu vui chơi Mẫu để báo `nguon_qua_cu`.
+- Nếu có thêm 1 tuần: tách rõ 2 chế độ cho `tu_choi` (hoặc cập nhật flow chỉ trả lời từ chối không kèm lịch), kiểm tra điểm/show đặc biệt được nhắc tên (`P28`, "show pháo hoa") trước khi lọc khu, và nhắc sớm giờ đóng cửa nếu khung giờ vượt 20:00.
