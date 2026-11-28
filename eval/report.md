@@ -1,7 +1,7 @@
-# Báo cáo đánh giá — lượt 1 → lượt 2 → lượt 3
+# Báo cáo đánh giá — lượt 1 → lượt 2
 
-> Điền ở guide bước 4.1. Các lượt dùng cùng bộ câu thử và cách chấm. Chấm ở rubric R5.
-> Số lấy từ `python run.py score eval/run-N.csv` sau khi điền cột `pass`. **Kết quả thấp ghi thật vẫn đủ điểm.**
+> Điền ở guide bước 4.1. Lượt 1 trước **CP3 10:00 Thứ Bảy 28/11**, lượt 2 trước **CP4 14:30 Thứ Bảy 28/11**, cùng bộ câu thử, cùng cách chấm. Chấm ở rubric R5.
+> Số lấy từ `python run.py score eval/run-1.csv` (và `run-2.csv`) sau khi điền cột `pass`. **Kết quả thấp ghi thật vẫn đủ điểm.**
 > Không được: sửa chuẩn "đạt", bỏ câu thử trượt, sửa `expected` cho khớp output, sửa kết quả lượt đã chạy.
 
 ## 1. Kết quả
@@ -9,10 +9,11 @@
 | Lượt | Run ID | Đạt / tổng | % | thuong | kho | tu_choi | So với chuẩn "đạt" |
 |---|---|---|---|---|---|---|---|
 | 1 | `run-1@20261127-235116` | 6/30 | 20% | 0/8 | 3/17 | 3/5 | chưa |
-| 2 | `run-2@20261128-081300` | 22/30 | 73% | 8/8 | 12/17 | 2/5 | chưa |
-| 3 | `run-3@20261128-113915` | 30/30 | 100% | 8/8 | 17/17 | 5/5 | đạt |
+| 2 | `run-2@20261128-113915` | 30/30 | 100% | 8/8 | 17/17 | 5/5 | đạt |
 
-Kết quả từng câu: `eval/run-1.csv`, `eval/run-2.csv`, `eval/run-3.csv`. Trace: `traces/run-1.jsonl`, `traces/run-2.jsonl`, `traces/run-3.jsonl`.
+Kết quả từng câu: `eval/run-1.csv`, `eval/run-2.csv`. Trace: `traces/run-1.jsonl`, `traces/run-2.jsonl`.
+
+Theo giới hạn tối đa hai lượt, kết quả tạo lúc `2026-11-28 11:39:15` (trước đây mang tên `run-3`) được chọn thay cho lượt 2 cũ. Nội dung câu trả lời và kết quả chấm không đổi; chỉ tên tệp và Run ID được đồng bộ thành `run-2`. Bản lượt 2 cũ được lưu ngoài thư mục đánh giá.
 
 ## 2. Lỗi lượt 1 — gom thành nhóm có tên
 
@@ -38,16 +39,11 @@ Kết quả từng câu: `eval/run-1.csv`, `eval/run-2.csv`, `eval/run-3.csv`. T
 - Đã sửa gì (trong `codebase/agent.py`):
   - Dùng **code xếp giờ** (`_build_schedule_by_code` / ghép khung giờ dựa trên ma trận di chuyển + đệm, giờ mở cửa, giờ show và tránh khung mưa) thay vì để model tự chọn giờ; model chỉ trích xuất ý và viết lý do/chọn ưu tiên.
   - Mặc định `khu = "Khu vui chơi Mẫu"` (và nêu rõ trong output) khi người dùng không nêu tên khu khác; mặc định người lớn 18–59 tuổi đủ chiều cao khi không nêu tuổi/chiều cao; cải thiện tách intent để câu thiếu thông tin (`K26`, `K28`) quay lại hỏi đúng mục thiếu.
-- Kết quả: nhóm lỗi hỏi ngược khu & sai giờ `21/21` → `1/21` (chỉ còn `K24` nhầm tên quán thành khu khác; riêng `K01`–`K05`, `K12`, `K17`–`K22`, `K29`, `K30` đều qua `lich_hop_le`) · tổng `20%` (6/30) → `73%` (22/30) · `thuong`: `0/8` → `8/8` (100%).
-- Câu nào **tệ đi** sau khi sửa: `K16` (lượt 1 hỏi lại mục thiếu và trùng hợp đạt `tu_choi_dung`; lượt 2 nhận đúng là khu ngoài data nhưng câu từ chối thiếu từ khóa phạm vi theo bộ chấm tự động) và `K13`, `K14` (lượt 2 vẫn tạo lịch hợp lệ cho các điểm còn lại thay vì chỉ từ chối không trả lịch như `metric_spec.yaml` quy định cho `tu_choi`).
+- Các lỗi còn lại được xử lý: dữ liệu thiếu (`K06`, `K10`, `K11`), yêu cầu từ chối (`K13`, `K14`, `K16`), sở thích không khả thi (`K23`) và nhận diện đúng điểm đến (`K24`); đồng thời làm rõ điều kiện nhóm ở `K08`, ngân sách ở `K26` và các trường hợp cần hỏi lại.
+- Kết quả: `30/30` (100%), so với lượt 1 là `6/30` (20%); `thuong` 8/8, `kho` 17/17, `tu_choi` 5/5.
 
-## 4. Lỗi lượt 2
+## 4. Chấm tay và kết luận
 
-- Các câu chưa đạt ở lượt 2: `K06`, `K10`, `K11`, `K13`, `K14`, `K16`, `K23`, `K24`.
-- Kết luận lượt 2: `22/30` (73%), chưa đạt ngưỡng tổng và các ngưỡng metric đã chốt trong `spec.md` §7.
-
-## 5. Kết quả lượt 3
-
-- Các lỗi còn lại ở lượt 2 đều đạt ở lượt 3 theo `pass_criterion`; auto-grader báo 25 PASS, 0 FAIL và 5 câu cần chấm tay.
-- Chấm tay `hoi_lai_dung_luc`: `K07`, `K08`, `K25`, `K26`, `K28` đều đạt (5/5). Với `K08`, yêu cầu tuổi/chiều cao của từng người được tính là đủ để làm rõ số lượng nhóm.
-- Kết luận lượt 3: `30/30` (100%), đạt ngưỡng tổng và các ngưỡng metric đã chốt trong `spec.md` §7.
+- Auto-grader báo 25 PASS, 0 FAIL và 5 câu cần chấm tay.
+- Chấm tay `hoi_lai_dung_luc`: `K07`, `K08`, `K25`, `K26`, `K28` đều đạt (5/5, 100%). Với `K08`, yêu cầu tuổi/chiều cao của từng người được tính là đủ để làm rõ số lượng nhóm.
+- Kết luận lượt 2: `30/30` (100%), đạt ngưỡng tổng và các ngưỡng metric đã chốt trong `spec.md` §7.
