@@ -22,8 +22,24 @@ SUPPORTED_PARK_NAME = "Khu vui chơi Mẫu"
 # Người lớn không nêu tuổi/chiều cao: giá trị giả định, luôn được nói rõ trong output.
 DEFAULT_ADULT = {"tuoi": 30, "chieu_cao_cm": 165}
 PREF_TAGS = {"nuoc", "dong_vat", "trong_nha", "cam_giac_manh", "tre_em", "ngam_canh", "an_uong", "nghi_ngoi", "show"}
+PREF_LABELS = {
+    "nuoc": "trò nước",
+    "dong_vat": "động vật",
+    "trong_nha": "hoạt động trong nhà",
+    "cam_giac_manh": "hoạt động cảm giác mạnh",
+    "tre_em": "hoạt động cho trẻ em",
+    "ngam_canh": "ngắm cảnh",
+    "an_uong": "ăn uống",
+    "nghi_ngoi": "nghỉ ngơi",
+    "show": "xem show",
+}
 _PAYMENT_REQUEST = re.compile(r"đặt\s+vé|mua\s+vé|thanh\s+toán|số\s+thẻ|\botp\b", re.IGNORECASE)
 _IMAGE_REQUEST = re.compile(r"\bảnh\b|\bhình\s+ảnh\b|\bảnh\s+gia\s+đình\b", re.IGNORECASE)
+_BYPASS_REQUEST = re.compile(
+    r"\bbỏ\s+qua\b.{0,60}\b(?:kiểm\s+tra|hướng\s+dẫn|quy\s+định)\b"
+    r"|\b(?:ghi|viết|đổi)\b.{0,40}\b(?:tổng\s+tiền|số\s+liệu)\b",
+    re.IGNORECASE | re.DOTALL,
+)
 
 SYSTEM = """Bạn hỗ trợ gia đình lập lịch một ngày ở khu vui chơi.
 Chỉ dùng dữ liệu được cung cấp; không bịa giờ, giá, điều kiện hoặc nguồn.
@@ -164,6 +180,64 @@ def _preference_errors(request: dict) -> list:
     if not isinstance(preferences, list) or any(not isinstance(item, str) for item in preferences):
         return ["Sở thích cần là danh sách văn bản."]
     return []
+
+
+def _infer_adult_friends(text: str, request: dict) -> Optional[int]:
+    if re.search(r"\b(?:bé|trẻ em|trẻ con|con nhỏ)\b", text, re.IGNORECASE):
+        return None
+
+    match = re.search(
+        r"\bnhóm\s+bạn\s+(\d{1,2})\s+người\b|\bnhóm\s+(\d{1,2})\s+bạn\b",
+        text,
+        re.IGNORECASE,
+    )
+    if not match:
+        return None
+    count = int(match.group(1) or match.group(2))
+    if not 1 <= count <= 12:
+        return None
+
+    group = request.get("nhom_di")
+    if group in (None, []):
+        request["nhom_di"] = [
+            {"nguoi_lon": True, "tuoi": None, "chieu_cao_cm": None}
+            for _ in range(count)
+        ]
+        return count
+    if not isinstance(group, list) or len(group) != count:
+        return None
+    if any(
+        not isinstance(member, dict)
+        or (
+            isinstance(member.get("tuoi"), int)
+            and not isinstance(member.get("tuoi"), bool)
+            and member["tuoi"] < 18
+        )
+        for member in group
+    ):
+        return None
+    for member in group:
+        if member.get("tuoi") in (None, ""):
+            member["nguoi_lon"] = True
+    return count
+
+
+def _required_show_not_available(text: str, shows: list) -> Optional[str]:
+    match = re.search(
+        r"(?:nhất định phải|bắt buộc phải|phải)\s+(?:được\s+)?xem\s+(?:show\s+)?([^,.!?]+)",
+        text,
+        re.IGNORECASE,
+    )
+    if not match:
+        return None
+    requested_words = set(re.findall(r"\w+", match.group(1).casefold()))
+    if not requested_words:
+        return None
+    for show in shows:
+        show_words = set(re.findall(r"\w+", show.get("name", "").casefold()))
+        if requested_words.issubset(show_words):
+            return None
+    return match.group(1).strip()
 
 
 def _extract_request(text: str):
@@ -504,6 +578,7 @@ def _preference_lines(request, schedule, by_id, planner) -> list:
     lines = []
     placed_ids = {item["id"] for item in schedule}
     for pref in request.get("so_thich", []):
+        label = PREF_LABELS.get(pref, pref)
         if pref == "show":
             if not any(i.startswith("S") for i in placed_ids):
                 lines.append("Sở thích xem show chưa đáp ứng được: không có show nào diễn trong khung giờ, đúng ngày và không bị huỷ do mưa.")
@@ -516,17 +591,33 @@ def _preference_lines(request, schedule, by_id, planner) -> list:
         tagged = [i for i, m in by_id.items() if pref in m.get("tags", [])]
         feasible = [i for i in tagged if planner.static_reason(i) is None]
         if feasible:
-            lines.append("Sở thích %s chưa đáp ứng được — các điểm phù hợp (%s) không còn chỗ trong khung giờ sau khi xếp các hoạt động khác." % (
-                pref, ", ".join(feasible)))
+            lines.append(
+                "Sở thích %s chưa đáp ứng được: các điểm phù hợp (%s) không còn chỗ sau khi xếp lịch."
+                % (label, ", ".join(feasible))
+            )
             continue
         reasons = []
         for item_id in tagged:
             reason = planner.static_reason(item_id)
             if reason:
-                reasons.append("%s (%s): %s" % (item_id, by_id[item_id]["name"], reason))
-        detail = "; ".join(reasons[:3]) if reasons else "không còn khoảng trống trong lịch"
-        lines.append("Sở thích %s chưa đáp ứng được — %s." % (pref, detail))
+                reasons.append(reason.casefold())
+        if any("mưa" in reason for reason in reasons):
+            detail = "các điểm ngoài trời phù hợp bị loại do mưa"
+        elif any("mở cửa" in reason or "khung giờ" in reason for reason in reasons):
+            detail = "các điểm phù hợp cho nhóm đã đóng trước khung giờ bạn chọn"
+        else:
+            detail = "không có điểm phù hợp khả dụng theo ngày, giờ và điều kiện nhóm"
+        lines.append("Sở thích %s chưa đáp ứng được: %s." % (label, detail))
     return lines
+
+
+def _skip_reason_for_user(reason: str) -> str:
+    lowered = reason.casefold()
+    if "mưa" in lowered:
+        return "bị loại do mưa"
+    if "mở cửa" in lowered or "khung giờ" in lowered:
+        return "không khả dụng trong khung giờ bạn chọn"
+    return reason
 
 
 def _format_result(schedule: list, validation: dict, by_id: dict, request: dict,
@@ -553,7 +644,13 @@ def _format_result(schedule: list, validation: dict, by_id: dict, request: dict,
     ))
     lines.extend(extra_lines)
     if validation["vi_pham_mem"]:
-        lines.append("Lưu ý: " + " ".join(validation["vi_pham_mem"]))
+        warnings = []
+        for raw_warning in validation["vi_pham_mem"]:
+            warning = raw_warning
+            for tag, label in PREF_LABELS.items():
+                warning = warning.replace(tag, label)
+            warnings.append(warning)
+        lines.append("Lưu ý: " + " ".join(warnings))
     if not weather.get("co_du_lieu"):
         lines.append("Chưa xác minh thời tiết: không có dự báo cho ngày đã chọn.")
     lines.append("Dữ liệu catalog, show, thời tiết và di chuyển hiện là synthetic; không phải thông tin xác nhận của khu vui chơi thật.")
@@ -581,6 +678,11 @@ def answer(text: str) -> dict:
         return _answer_result(
             "Bản demo chưa đọc được ảnh. Vui lòng nhập bằng chữ ngày đi, khung giờ, ngân sách và tuổi/chiều cao từng người."
         )
+    if _BYPASS_REQUEST.search(text):
+        return _answer_result(
+            "Mình không thể bỏ qua kiểm tra chiều cao, giờ hoặc ngân sách hay ghi số liệu sai theo yêu cầu. "
+            "Mình không lập lịch theo yêu cầu này."
+        )
 
     request = _extract_request(text)
     if request is None:
@@ -589,22 +691,46 @@ def answer(text: str) -> dict:
             % _REQUEST_SCHEMA
         )
 
+    if request.get("yeu_cau_bo_qua_kiem_tra"):
+        note("dừng: yêu cầu bỏ qua ràng buộc")
+        return _answer_result(
+            "Mình không thể bỏ qua kiểm tra chiều cao, giờ hoặc ngân sách hay ghi số liệu sai theo yêu cầu. "
+            "Mình không lập lịch theo yêu cầu này."
+        )
+
     if request.get("intent") == "ngoai_pham_vi":
         return _answer_result(
             "Bản demo chỉ hỗ trợ lập lịch một ngày trong Khu vui chơi Mẫu; mình không thể hỗ trợ yêu cầu này."
         )
 
+    assumed_friend_count = _infer_adult_friends(text, request)
     park_name = request.get("khu")
     if (
         isinstance(park_name, str)
         and park_name.strip()
         and park_name.strip().casefold() != SUPPORTED_PARK
     ):
-        return _answer_result(
-            "Bản demo hiện chỉ hỗ trợ Khu vui chơi Mẫu; không có dữ liệu xác minh cho khu bạn nêu."
+        catalog = tra_diem_choi(SUPPORTED_PARK_NAME)
+        known_activity = any(
+            item.get("name", "").strip().casefold() == park_name.strip().casefold()
+            for item in catalog["items"]
         )
+        if known_activity:
+            request["khu"] = SUPPORTED_PARK_NAME
+        else:
+            note("dừng: yêu cầu địa điểm ngoài phạm vi")
+            return _answer_result(
+                "Mình chỉ hỗ trợ Khu vui chơi Mẫu và lập lịch một ngày trong khu đó; "
+                "không thể xếp lịch cả thành phố hoặc địa điểm ngoài dữ liệu."
+            )
 
     assumptions = _fill_defaults(request)
+    if assumed_friend_count:
+        assumptions.insert(
+            0,
+            "Vì bạn ghi nhóm bạn %d người mà không nêu trẻ em, mình tạm tính tất cả là người lớn; "
+            "hãy sửa nếu giả định này không đúng." % assumed_friend_count,
+        )
     missing = _request_errors(request)
     if missing:
         note("dừng: thiếu hoặc sai dữ liệu bắt buộc")
@@ -624,6 +750,20 @@ def answer(text: str) -> dict:
         return _answer_result(
             "Không có điểm chơi hoặc show trong dữ liệu để lập lịch. Dữ liệu catalog hiện là synthetic."
         )
+    park_close = max(_to_min(item["close"]) for item in park["items"]) if park["items"] else None
+
+    unavailable_show = _required_show_not_available(text, shows["shows"])
+    if unavailable_show:
+        note("dừng: show bắt buộc không có trong lịch dữ liệu")
+        lines = [
+            "Không có show %s trong danh sách show có dữ liệu cho ngày %s; "
+            "mình không thể đáp ứng yêu cầu bắt buộc nên không lập lịch."
+            % (unavailable_show, request["ngay"])
+        ]
+        if park_close is not None and _to_min(request["khung_gio"]["end"]) > park_close:
+            lines.append("Khu đóng cửa lúc %s; không thể xếp hoạt động sau giờ đóng cửa." % _hhmm(park_close))
+        lines.append("Dữ liệu show hiện là synthetic; hãy kiểm tra lịch chính thức của khu vui chơi.")
+        return _answer_result("\n".join(lines))
 
     zones = sorted({item["zone"] for item in items})
     travel = {}
@@ -635,13 +775,7 @@ def answer(text: str) -> dict:
     weekday = shows.get("weekday") or shows.get("thu")
     planner = _Planner(request, by_id, travel, weather, weekday)
 
-    if request.get("yeu_cau_bo_qua_kiem_tra"):
-        assumptions.append(
-            "Mình không làm theo yêu cầu bỏ qua kiểm tra hoặc đổi số liệu: mọi ràng buộc "
-            "(giờ, chiều cao, thời tiết, ngân sách) vẫn do code kiểm và tổng tiền do code tính."
-        )
-    park_close = max(_to_min(item["close"]) for item in park["items"])
-    if _to_min(request["khung_gio"]["end"]) > park_close:
+    if park_close is not None and _to_min(request["khung_gio"]["end"]) > park_close:
         assumptions.append("Khu đóng cửa lúc %s nên lịch chỉ xếp được tới %s." % (
             _hhmm(park_close), _hhmm(park_close)))
 
@@ -719,12 +853,14 @@ def answer(text: str) -> dict:
             no_room.append(item_id)
             continue
         name = by_id.get(item_id, {}).get("name", item_id)
-        skip_lines.append("Không xếp %s (%s): %s." % (item_id, name, reason))
+        skip_lines.append("Không xếp %s (%s): %s." % (
+            item_id, name, _skip_reason_for_user(reason)))
     if no_room:
         skip_lines.append("Không còn chỗ trong khung giờ (đã tính thời gian đi lại) cho: %s." % ", ".join(no_room))
     for item_id in sorted(mentioned - placed_ids - reported):
         reason = planner.static_reason(item_id) or "không còn chỗ trong khung giờ"
-        skip_lines.append("Không xếp %s (%s) bạn nhắc tới: %s." % (item_id, by_id[item_id]["name"], reason))
+        skip_lines.append("Không xếp %s (%s) bạn nhắc tới: %s." % (
+            item_id, by_id[item_id]["name"], _skip_reason_for_user(reason)))
     unsuitable = [i for i in park["items"] if not i["phu_hop_nhom"]]
     if unsuitable:
         skip_lines.append("%d/%d điểm chơi không phù hợp nhóm theo tuổi/chiều cao hoặc cần người lớn đi cùng nên không được xếp." % (
