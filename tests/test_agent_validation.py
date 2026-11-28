@@ -64,6 +64,21 @@ class TestRequestValidation(unittest.TestCase):
         self.assertIn("chiều cao 11 cm", errors[0])
 
 
+class TestPlanner(unittest.TestCase):
+    def test_missing_travel_estimate_fails_closed(self):
+        planner = agent._Planner(
+            {"khung_gio": {"start": "09:00", "end": "17:00"}},
+            {},
+            {},
+            {"slots": []},
+            None,
+        )
+
+        self.assertEqual(planner.need("A", "A"), 0)
+        with self.assertRaisesRegex(ValueError, "Thiếu hoặc sai ước lượng thời gian"):
+            planner.need("A", "B")
+
+
 class TestAgentSafety(unittest.TestCase):
     def setUp(self):
         self.request = {
