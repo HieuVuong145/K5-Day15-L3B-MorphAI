@@ -147,20 +147,38 @@ Data BTC cấp đã dùng (nếu có — không commit nguyên file): không dù
 - So với impact / người / tháng (§2): đáng làm không, vì sao:
 
 ## §9. Rủi ro & an toàn
-- Dữ liệu: đã ẩn danh gì, không thu gì, không đưa gì vào model gói miễn phí:
-- AI **không được** làm gì kể cả khi người dùng yêu cầu:
-- Ai có thể bị hại nếu AI sai, và nhóm chặn thế nào:
+- **Dữ liệu:** khảo sát (`evidence/survey/responses.csv`, n = 26) đã bỏ tên, email; phỏng vấn ghi `P1–P6` + vai, không ghi tên, SĐT, không ghi âm. Không thu dữ liệu cá nhân của người dùng sản phẩm ngoài tuổi, chiều cao từng người trong tin nhắn (không lưu giữa các lượt). Không dùng data BTC; catalog, show, vé, thời tiết, di chuyển đều `synthetic` (`data/DATA_CARD.md`). Model gọi qua API trả phí (`gpt-4o-mini`), key chỉ ở `.env` (không commit). Chỉ gửi cho model nội dung tin nhắn chuyến đi và catalog synthetic.
+- **AI không được làm, kể cả khi người dùng yêu cầu:**
+  - Đặt vé, thanh toán, nhận hay lặp lại số thẻ/OTP — chặn bằng code trước khi gọi model (`agent.py` `_PAYMENT_REQUEST`; câu thử `K15`).
+  - Xếp trò không hợp tuổi/chiều cao, bỏ qua kiểm tra hay "ghi tổng tiền cho đẹp" — code lọc điểm theo `tra_diem_choi`, `kiem_lich_trinh` kiểm lại, tổng tiền chỉ lấy từ `tinh_tong_tien` (`K13`, `K14`).
+  - Bịa giờ, giá, show, địa điểm ngoài dữ liệu, hoặc khẳng định dữ liệu synthetic là thông tin thật của khu vui chơi (`K11`, `K16`, `K24`).
+  - Tự đoán khi thiếu ngày đi, khung giờ, ngân sách, tuổi/chiều cao trẻ em (`K07`, `K08`, `K28`).
+- **Ai có thể bị hại nếu AI sai, và nhóm chặn thế nào:**
+  - *Trẻ em:* xếp trò vượt giới hạn chiều cao/tuổi hoặc không có người lớn đi cùng → nguy hiểm. Chặn: điều kiện nhóm là ràng buộc cứng do code kiểm; có vi phạm thì không xuất lịch.
+  - *Gia đình:* tổng tiền sai → hụt tiền tại cổng; lịch sai giờ show/đóng cửa → mất công đi. Chặn: giờ do code xếp từ dữ liệu, tiền do code tính, lịch chỉ ra khi `kiem_lich_trinh` hợp lệ; không xếp được thì nói thẳng và nêu mức cần nới.
+  - *Rủi ro còn lại:* dữ liệu synthetic có thể khác khu thật; AI tách sai một con số trong câu chữ tự do (vd chiều cao) thì code kiểm trên dữ liệu sai — giảm bằng kiểm khoảng 50–220 cm / 0–100 tuổi và in lại giá trị đã hiểu. Người dùng luôn tự quyết có đi theo lịch hay không.
 
 ## §10. Phân công & changelog
-- Phân công có tên (theo chặng, chia cặp — guide "Cách chia việc"): __
-- Dùng AI vào việc gì (2–3 dòng; chi tiết `docs/ai-usage.md`):
+- Phân công có tên (theo vai, làm theo cặp và đổi cặp theo chặng của guide):
+  - Vương Toàn Minh Hiếu — bằng chứng (khảo sát, phỏng vấn `P1–P6`, `evidence/summary.md`), impact (§1–§2), bộ câu thử K18–K30, cải tiến sau lượt 1, §9–§10, slide.
+  - Nguyễn Đình Trường — bản chạy thử (`codebase/agent.py`, `ai.py`: nối `gpt-4o-mini`, kiểm dữ liệu vào, chặn thanh toán/ảnh), README, chạy lượt 1–2.
+  - Vũ Quang Thanh — data synthetic + `DATA_CARD.md`, công cụ (`codebase/tools.py`), chấm chéo 5 output, chi phí (`cost/`).
+  - Nguyễn Mạnh Cường — bộ câu thử, metric, chuẩn "đạt", `eval/auto_grade.py`, chấm và báo cáo (`eval/`).
+- Dùng AI vào việc gì (2–3 dòng; chi tiết `docs/ai-usage.md`): dùng Claude Code / trợ lý AI để viết và rà code, tính số từ `responses.csv` bằng script, soạn nháp spec và câu thử; mọi số liệu được tính lại từ file gốc, câu thử kiểm bằng công cụ, người phụ trách từng phần đọc và giải thích được phần của mình. Không dùng AI để tạo người được phỏng vấn, trích dẫn hay câu trả lời khảo sát.
 - Nhật ký thay đổi — **mọi thay đổi sau CP2 19:30 Thứ Sáu 27/11 phải có dòng ở đây**:
 
 **CP2 → CP4** (vd thu hẹp lát cắt, hỏi thêm người dùng, lần cải tiến trước lượt 2)
 
 | Thời điểm | Đổi gì | Vì sao (trỏ về câu thử / lỗi / bằng chứng nào) |
 |---|---|---|
-|  |  |  |
+| 27/11 21:10–22:59 | Nối model thật `gpt-4o-mini` (`ai.py`); `agent.py` kiểm tuổi 0–100, chiều cao 50–220 cm, trả kèm JSON lịch, chặn đặt vé/thẻ/OTP và ảnh; README nhóm | Guide 3.3 (AI thật trước CP3) · `K15`, `K17`, `K25` · metric `lich_hop_le` cần JSON lịch để chấm |
+| 27/11 21:40 | Bộ câu thử 17 → 30 câu (thêm K18–K30, chỉ thêm, không sửa câu cũ) | Guide 3.4 (20–30 câu) · ca biên vé (100 cm, ≥60 tuổi, sau 16:00), nguồn cũ, câu từ khảo sát |
+| 27/11 22:00 → 28/11 09:20 | `cost/personas.yaml`: persona theo khảo sát câu 1, giá `gpt-4o-mini` + `gpt-6.1-terra`, số người dùng theo §2 | Guide 4.2 · token đo trên `gpt-4o-mini` |
+| 27/11 22:33 → 28/11 00:02 | `eval/auto_grade.py` chấm 5 metric code; chạy lượt 1 `run-1@20261127-235116` → 6/30 | Guide 3.4 |
+| 28/11 01:35 | Thêm phỏng vấn `P5`, `P6` (phụ huynh); bảng theo vai và câu 3 × câu 5 trong `summary.md`; công thức impact ra số (nguồn VnEconomy) | R1, R2 · vai chính trước đó mỏng (2 phụ huynh) |
+| 28/11 01:35 | **Cải tiến trước lượt 2:** AI chỉ chọn điểm + thứ tự, code xếp giờ (giờ show, giờ mở, đi lại + đệm, mưa); mặc định Khu vui chơi Mẫu và người lớn (in rõ trong output); câu mơ hồ hỏi lại thay vì từ chối; nêu lý do không xếp | Lượt 1: `thuong` 0/8 vì model tự điền giờ lệch (vd `K01`: S01 xếp 11:00 thay vì 10:30); 26/30 câu dừng ở bước hỏi lại tên khu / chiều cao người lớn; `K26`, `K28` bị từ chối nhầm |
+| 28/11 08:16 | Chạy lượt 2 `run-2.csv` trên cùng 30 câu | Guide 4.1 |
+| 28/11 09:20 | Người thứ hai (Thanh) chấm độc lập 5 output `run-1` → khớp 5/5 | Guide 2.4 bước 4 |
 
 **Sau CP4 (đến 23:59 Thứ Bảy 28/11)** (sửa theo góp ý — không sửa chuẩn "đạt", câu thử, số bằng chứng, kết quả các lượt đã chạy)
 
