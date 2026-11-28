@@ -499,8 +499,16 @@ def kiem_lich_trinh(
             "chi_tiet": "Tổng chi phí %s VNĐ vượt ngân sách %s VNĐ (thiếu %s VNĐ)."
                         % ("{:,}".format(tong_tien), "{:,}".format(ngan_sach), "{:,}".format(thieu)),
         })
-        suggestions.append("Cần nới ngân sách thêm ít nhất %s VNĐ (tổng tối thiểu %s VNĐ) hoặc bỏ điểm có phụ phí/chọn vé chiều tối sau 16:00."
-                           % ("{:,}".format(thieu), "{:,}".format(tong_tien)))
+        # Sau CP4: chỉ gợi ý vé chiều tối khi khung giờ còn kéo qua giờ vé chiều tối và chưa dùng vé đó.
+        cutoff = _load_json("tickets.json").get("afternoon_cutoff", "16:00")
+        options = []
+        if cost_info.get("phu_phi_vnd", 0) > 0:
+            options.append("bỏ điểm có phụ phí")
+        if win_start < _to_min(cutoff) < win_end:
+            options.append("vào từ %s để dùng vé chiều tối" % cutoff)
+        suggestions.append("Cần nới ngân sách thêm ít nhất %s VNĐ (tổng tối thiểu %s VNĐ)%s."
+                           % ("{:,}".format(thieu), "{:,}".format(tong_tien),
+                              (" hoặc " + " / ".join(options)) if options else ""))
 
     # 8. Ràng buộc mềm: nghỉ cho trẻ <= 6 tuổi khi đi > 4 tiếng, và sở thích
     has_young_child = any(int(m.get("tuoi", 99)) <= 6 for m in (nhom_di or []))

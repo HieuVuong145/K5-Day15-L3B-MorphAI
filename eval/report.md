@@ -11,8 +11,11 @@
 | 1 | `run-1@20261127-235116` | 6/30 | 20% | 0/8 | 3/17 | 3/5 | chưa |
 | 2 | `run-2@20261128-081300` | 22/30 | 73% | 8/8 | 12/17 | 2/5 | chưa |
 | *3 (thử nghiệm)* | `run-3@20261128-113915` | 30/30 | 100% | 8/8 | 17/17 | 5/5 | *không dùng chấm R5* |
+| *4 (sau CP4)* | `run-4@20261128-172313` | 25/25 tự động + 5 chờ chấm tay | — | 8/8 | 12/12 tự động + 5 chờ chấm tay (K07, K08, K25, K26, K28) | 5/5 | *không dùng chấm R5* |
 
 *Lượt 3 chạy lúc 11:39 trên bản agent sửa tiếp theo đúng các câu trượt ở lượt 2, chấm bằng bản `auto_grade.py` cũng đã sửa; bản code đó là bản hiện trên `main` (PR #15). Vì đã nhìn đúng các câu thử khi sửa nên 100% không phản ánh độ tổng quát; số dùng để báo cáo là lượt 1 → lượt 2. File: `eval/run-3.csv`, `traces/run-3.jsonl`.*
+
+*Lượt 4 chạy sau CP4 (17:23) để kiểm 4 lỗi mới tìm bằng 8 câu thử **ngoài** bộ (`eval/probe-post-cp4.md`) không làm hỏng câu nào trong bộ: 0 câu trượt ở phần chấm tự động. Giống lượt 3, lượt này không phản ánh độ tổng quát trên bộ câu thử; bằng chứng cải tiến là bảng trước/sau trong `eval/probe-post-cp4.md`.*
 
 Kết quả từng câu: `eval/run-1.csv`, `eval/run-2.csv`. Trace: `traces/run-1.jsonl`, `traces/run-2.jsonl`.
 

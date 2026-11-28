@@ -41,6 +41,7 @@ Dữ liệu chạy thử là bộ catalog `synthetic` của **Khu vui chơi Mẫ
 | 1 | `run-1@20261127-235116` | `gpt-4o-mini` | Bản nối model đầu (bắt buộc nêu tên khu; sửa tối đa 1 vòng) | 6/30 | 20% | Chưa (`thuong` 0/8 · `kho` 3/17 · `tu_choi` 3/5) |
 | 2 | `run-2@20261128-081300` | `gpt-4o-mini` | Code xếp giờ + mặc định Khu vui chơi Mẫu và thông tin người lớn | 22/30 | 73% | Chưa (`thuong` 8/8 · `kho` 12/17 · `tu_choi` 2/5) |
 | 3 | `run-3@20261128-113915` | `gpt-4o-mini` | *Thử nghiệm, không dùng chấm R5:* bản agent sửa tiếp theo đúng các câu trượt ở lượt 2 (PR #15, là bản code hiện trên `main`), chấm bằng bản `auto_grade.py` đã sửa cùng PR | 30/30 | 100% | — (bộ câu thử đã nhìn khi sửa; chưa có phần giữ riêng) |
+| 4 | `run-4@20261128-172313` | `gpt-4o-mini` | *Sau CP4, không dùng chấm R5:* code hiện trên `main` + sửa 4 lỗi tìm bằng 8 câu thử mới ngoài bộ (`eval/probe-post-cp4.md`): lách kiểm tra bằng cách nói khác, hỏi lại thừa tuổi người lớn, câu giả định tuổi sai, gợi ý vé chiều tối và khung giờ model đoán | 25/25 câu chấm tự động đạt · 5 câu `hoi_lai` chờ người chấm | — | — (bộ câu thử đã nhìn khi sửa ở lượt 3) |
 
 Lượt chạy lại vì lỗi kỹ thuật, lượt sau CP4: ghi thêm dòng, không sửa dòng cũ.
 
