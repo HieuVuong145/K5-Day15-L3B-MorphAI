@@ -8,7 +8,7 @@
 
 - **Persona** (`cost/personas.yaml`): 3 kiểu — đi ít (46%), đi vừa (33%), đi nhiều (21%); số lượt hỏi/phiên lần lượt 1, 2, 3. Nguồn: khảo sát câu 1 (n=26, 24 người có đi); số lượt hỏi/phiên là ước tính.
 - **Số người dùng** 3 kịch bản: thấp 1.371 · cơ sở 4.113 · cao 6.855 nhóm/tháng. Nguồn: 1%, 3%, 5% (tự ước tính) của 137.100 nhóm/tháng theo `spec.md` §2.
-- **Giá** (USD/1M token, giá Standard): `gpt-4o-mini` $0.15 vào / $0.60 ra · `gpt-6.1-terra` $1.00 vào / $5.00 ra. Nguồn: [OpenAI API pricing](https://developers.openai.com/api/docs/pricing), xem 2026-11-28; giá đã ghi trong `personas.yaml`.
+- **Giá** (USD/1M token, giá Standard): `gpt-4o-mini` $0.15 vào / $0.60 ra · `gpt-6.1-terra` $1.00 vào / $5.00 ra. Nguồn: [OpenAI API pricing](https://developers.openai.com/api/docs/pricing) theo bảng giá BTC `de-bai/further-reading/model-prices.md` (BTC xem 25/11/2026); giá đã ghi trong `personas.yaml`.
 - **Tỉ lệ đạt** dùng để tính: 22/30 (73%) — lượt 2 `run-2@20261128-081300` (`--rate-from eval/run-2.csv`), đúng bản agent của lượt 2 (commit `90a3f01`)
 - Đo token trên model `gpt-4o-mini`, tính giá model `gpt-4o-mini` và `gpt-6.1-terra`.
 

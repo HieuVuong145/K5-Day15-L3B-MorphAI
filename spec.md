@@ -187,4 +187,7 @@ Data BTC cấp đã dùng (nếu có — không commit nguyên file): không dù
 
 | Thời điểm | Đổi gì | Vì sao |
 |---|---|---|
-|  |  |  |
+| 28/11 17:00 | Slide trang 4: mô tả K01, K13 theo output của bản code hiện tại (bỏ "7 điểm… ăn trưa", K13 từ chối không xuất lịch, ghi chú lượt 2 còn trượt); ví dụ câu thiếu thông tin đổi thành đúng K28 "Thoải mái là đc"; xuất lại `demo-slides.pdf` | Mô tả cũ lấy từ output lượt 2, không khớp lúc chạy demo trên code hiện tại; ví dụ cũ không có trong bộ câu thử |
+| 28/11 17:00 | `eval/report.md` §3: K16 là câu duy nhất tệ đi; K13, K14 trượt cả hai lượt, chỉ đổi kiểu lỗi | Đối chiếu lại `eval/run-1.csv` (K13, K14 = 0 ở lượt 1). Chỉ sửa câu chữ, không đổi kết quả |
+| 28/11 17:00 | `README.md`: thêm mục "Dùng AI vào việc gì"; sửa mô tả mặc định khu (không nêu khu → Khu vui chơi Mẫu) | Luật chung mục 1; README ghi "phải nêu tên khu" không khớp code sau lượt 1 |
+| 28/11 17:00 | `cost/cost-estimate.md`: ngày xem giá ghi đúng 25/11/2026 theo bảng giá BTC | Khớp `cost/personas.yaml` và `de-bai/further-reading/model-prices.md`; số không đổi |

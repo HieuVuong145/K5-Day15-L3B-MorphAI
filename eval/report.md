@@ -41,7 +41,7 @@ Kết quả từng câu: `eval/run-1.csv`, `eval/run-2.csv`. Trace: `traces/run-
   - Dùng **code xếp giờ** (`_build_schedule_by_code` / ghép khung giờ dựa trên ma trận di chuyển + đệm, giờ mở cửa, giờ show và tránh khung mưa) thay vì để model tự chọn giờ; model chỉ trích xuất ý và viết lý do/chọn ưu tiên.
   - Mặc định `khu = "Khu vui chơi Mẫu"` (và nêu rõ trong output) khi người dùng không nêu tên khu khác; mặc định người lớn 18–59 tuổi đủ chiều cao khi không nêu tuổi/chiều cao; cải thiện tách intent để câu thiếu thông tin (`K26`, `K28`) quay lại hỏi đúng mục thiếu.
 - Kết quả: nhóm lỗi hỏi ngược khu & sai giờ `21/21` → `1/21` (chỉ còn `K24` nhầm tên quán thành khu khác; riêng `K01`–`K05`, `K12`, `K17`–`K22`, `K29`, `K30` đều qua `lich_hop_le`) · tổng `20%` (6/30) → `73%` (22/30) · `thuong`: `0/8` → `8/8` (100%).
-- Câu nào **tệ đi** sau khi sửa: `K16` (lượt 1 hỏi lại mục thiếu và trùng hợp đạt `tu_choi_dung`; lượt 2 nhận đúng là khu ngoài data nhưng câu từ chối thiếu từ khóa phạm vi theo bộ chấm tự động) và `K13`, `K14` (lượt 2 vẫn tạo lịch hợp lệ cho các điểm còn lại thay vì chỉ từ chối không trả lịch như `metric_spec.yaml` quy định cho `tu_choi`).
+- Câu nào **tệ đi** sau khi sửa: `K16` (lượt 1 hỏi lại mục thiếu và trùng hợp đạt `tu_choi_dung`; lượt 2 nhận đúng là khu ngoài data nhưng câu từ chối thiếu từ khóa phạm vi theo bộ chấm tự động) — là câu duy nhất từ đạt thành trượt (`tu_choi` 3/5 → 2/5). `K13`, `K14` trượt ở **cả hai lượt** nhưng đổi kiểu lỗi: lượt 1 dừng ở bước hỏi lại tên khu; lượt 2 chặn được yêu cầu sai nhưng vẫn tạo lịch hợp lệ cho các điểm còn lại thay vì chỉ từ chối không trả lịch như `metric_spec.yaml` quy định cho `tu_choi`. *(Sửa câu chữ sau CP4, 28/11; không đổi kết quả.)*
 
 ## 4. Còn lại
 
