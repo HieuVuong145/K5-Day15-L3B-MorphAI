@@ -39,10 +39,10 @@ Dữ liệu chạy thử là bộ catalog `synthetic` của **Khu vui chơi Mẫ
 | Lượt | Run ID | Model | Cấu hình (prompt / công cụ / thay đổi) | Đạt / tổng | % | Đạt chuẩn? |
 |---|---|---|---|---|---|---|
 | 1 | `run-1@20261127-235116` | `gpt-4o-mini` | Bản nối model đầu (bắt buộc nêu tên khu; sửa tối đa 1 vòng) | 6/30 | 20% | Chưa (`thuong` 0/8 · `kho` 3/17 · `tu_choi` 3/5) |
-| 2 | `run-2@20261128-113915` | `gpt-4o-mini` | Code xếp giờ + xử lý câu thiếu dữ liệu, show bắt buộc, từ chối, sở thích và điểm có nguồn cũ | 30/30 | 100% | Đạt (`thuong` 8/8 · `kho` 17/17 · `tu_choi` 5/5) |
+| 2 | `run-2@20261128-081300` | `gpt-4o-mini` | Code xếp giờ + mặc định Khu vui chơi Mẫu và thông tin người lớn | 22/30 | 73% | Chưa (`thuong` 8/8 · `kho` 12/17 · `tu_choi` 2/5) |
+| 3 | `run-3@20261128-113915` | `gpt-4o-mini` | Cải tiến xử lý câu thiếu dữ liệu, show bắt buộc, từ chối, sở thích và điểm có nguồn cũ | 30/30 | 100% | Đạt (`thuong` 8/8 · `kho` 17/17 · `tu_choi` 5/5) |
 
-Theo giới hạn tối đa hai lượt, kết quả mới nhất được chọn làm lượt 2 thay cho lượt 2 cũ; dữ liệu câu trả lời và chấm điểm không đổi, chỉ đồng bộ tên tệp và Run ID.
+Run-2 là kết quả cũ được khôi phục nguyên trạng. Code hiện tại có thêm thay đổi sau lượt chạy này; số liệu không đánh giá các thay đổi mới hơn.
 
 ## 6. Lỗi chính
-
-Nhóm lỗi lớn nhất ở lượt 1 là hỏi ngược tên khu vui chơi (20/30 câu) và model tự tính giờ sai (`K01`). Lượt 2 dùng **code xếp giờ**, mặc định Khu vui chơi Mẫu/người lớn, và xử lý các lỗi còn lại về dữ liệu thiếu, show bắt buộc, từ chối, sở thích và điểm có nguồn cũ. Kết quả đạt 30/30 (100%). Auto-grader: 25 PASS, 0 FAIL; 5 câu `hoi_lai` được chấm tay PASS.
+Nhóm lỗi lớn nhất ở lượt 1 là hỏi ngược tên khu vui chơi (20/30 câu) và model tự tính giờ sai (`K01`). Lượt 2 tăng từ 6/30 (20%) lên 22/30 (73%) nhưng chưa đạt chuẩn. Lượt 3 xử lý các lỗi còn lại và đạt 30/30 (100%); chi tiết ở [báo cáo](report.md).
